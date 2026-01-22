@@ -1,47 +1,25 @@
-using System.Net.Http.Headers;
-using Microsoft.Extensions.Options;
-using TofuPilot.Abstractions.Configuration;
-
 namespace TofuPilot.Http;
 
 /// <summary>
 /// HTTP message handler that adds authentication headers to requests.
 /// </summary>
-public sealed class AuthenticationHandler : DelegatingHandler
+public sealed class AuthenticationHandler(IOptions<TofuPilotOptions> options) : DelegatingHandler
 {
-    private readonly TofuPilotOptions _options;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AuthenticationHandler"/> class.
-    /// </summary>
-    /// <param name="options">The TofuPilot options.</param>
-    public AuthenticationHandler(IOptions<TofuPilotOptions> options)
-    {
-        _options = options.Value;
-    }
+    private readonly TofuPilotOptions _options = options.Value;
 
     /// <inheritdoc/>
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        var apiKey = GetApiKey();
-        if (!string.IsNullOrEmpty(apiKey))
-        {
+        if (GetApiKey() is { } apiKey)
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
-        }
 
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
     }
 
-    private string? GetApiKey()
-    {
-        // First check options, then environment variable
-        if (!string.IsNullOrEmpty(_options.ApiKey))
-        {
-            return _options.ApiKey;
-        }
-
-        return Environment.GetEnvironmentVariable("TOFUPILOT_API_KEY");
-    }
+    private string? GetApiKey() =>
+        !string.IsNullOrEmpty(_options.ApiKey)
+            ? _options.ApiKey
+            : Environment.GetEnvironmentVariable("TOFUPILOT_API_KEY");
 }

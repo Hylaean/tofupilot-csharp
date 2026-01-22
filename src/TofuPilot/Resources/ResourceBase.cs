@@ -1,18 +1,16 @@
-using System.Text;
 using System.Web;
-using TofuPilot.Http;
 
 namespace TofuPilot.Resources;
 
 /// <summary>
 /// Base class for API resources.
 /// </summary>
-public abstract class ResourceBase
+public abstract class ResourceBase(ITofuPilotHttpClient httpClient)
 {
     /// <summary>
     /// Gets the HTTP client.
     /// </summary>
-    protected ITofuPilotHttpClient HttpClient { get; }
+    protected ITofuPilotHttpClient HttpClient { get; } = httpClient;
 
     /// <summary>
     /// Gets the base path for this resource.
@@ -20,26 +18,12 @@ public abstract class ResourceBase
     protected abstract string BasePath { get; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ResourceBase"/> class.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use.</param>
-    protected ResourceBase(ITofuPilotHttpClient httpClient)
-    {
-        HttpClient = httpClient;
-    }
-
-    /// <summary>
     /// Builds a URI with query parameters.
     /// </summary>
-    /// <param name="path">The base path.</param>
-    /// <param name="queryParams">The query parameters.</param>
-    /// <returns>The URI with query parameters.</returns>
     protected static string BuildUri(string path, IDictionary<string, string?>? queryParams = null)
     {
-        if (queryParams == null || queryParams.Count == 0)
-        {
+        if (queryParams is not { Count: > 0 })
             return path;
-        }
 
         var sb = new StringBuilder(path);
         var first = true;
@@ -47,9 +31,7 @@ public abstract class ResourceBase
         foreach (var (key, value) in queryParams)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 continue;
-            }
 
             sb.Append(first ? '?' : '&');
             sb.Append(HttpUtility.UrlEncode(key));
@@ -64,59 +46,46 @@ public abstract class ResourceBase
     /// <summary>
     /// Builds a URI with array query parameters.
     /// </summary>
-    /// <param name="path">The base path.</param>
-    /// <param name="queryParams">The query parameters.</param>
-    /// <returns>The URI with query parameters.</returns>
     protected static string BuildUriWithArrayParams(string path, IDictionary<string, object?>? queryParams = null)
     {
-        if (queryParams == null || queryParams.Count == 0)
-        {
+        if (queryParams is not { Count: > 0 })
             return path;
-        }
 
         var sb = new StringBuilder(path);
         var first = true;
 
         foreach (var (key, value) in queryParams)
         {
-            if (value == null)
+            switch (value)
             {
-                continue;
-            }
-
-            if (value is IEnumerable<string> stringValues)
-            {
-                foreach (var item in stringValues)
-                {
-                    sb.Append(first ? '?' : '&');
-                    sb.Append(HttpUtility.UrlEncode(key));
-                    sb.Append('=');
-                    sb.Append(HttpUtility.UrlEncode(item));
-                    first = false;
-                }
-            }
-            else if (value is DateTimeOffset dto)
-            {
-                sb.Append(first ? '?' : '&');
-                sb.Append(HttpUtility.UrlEncode(key));
-                sb.Append('=');
-                sb.Append(HttpUtility.UrlEncode(dto.ToString("o")));
-                first = false;
-            }
-            else
-            {
-                var stringValue = value.ToString();
-                if (!string.IsNullOrEmpty(stringValue))
-                {
-                    sb.Append(first ? '?' : '&');
-                    sb.Append(HttpUtility.UrlEncode(key));
-                    sb.Append('=');
-                    sb.Append(HttpUtility.UrlEncode(stringValue));
-                    first = false;
-                }
+                case null:
+                    continue;
+                case IEnumerable<string> stringValues:
+                    foreach (var item in stringValues)
+                    {
+                        AppendParam(sb, ref first, key, item);
+                    }
+                    break;
+                case DateTimeOffset dto:
+                    AppendParam(sb, ref first, key, dto.ToString("o"));
+                    break;
+                default:
+                    var stringValue = value.ToString();
+                    if (!string.IsNullOrEmpty(stringValue))
+                        AppendParam(sb, ref first, key, stringValue);
+                    break;
             }
         }
 
         return sb.ToString();
+    }
+
+    private static void AppendParam(StringBuilder sb, ref bool first, string key, string value)
+    {
+        sb.Append(first ? '?' : '&');
+        sb.Append(HttpUtility.UrlEncode(key));
+        sb.Append('=');
+        sb.Append(HttpUtility.UrlEncode(value));
+        first = false;
     }
 }

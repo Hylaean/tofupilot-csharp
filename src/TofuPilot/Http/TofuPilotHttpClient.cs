@@ -1,47 +1,19 @@
-using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
-using TofuPilot.Abstractions.Exceptions;
-using TofuPilot.Serialization;
-
 namespace TofuPilot.Http;
 
 /// <summary>
 /// HTTP client implementation for TofuPilot API.
 /// </summary>
-public sealed class TofuPilotHttpClient : ITofuPilotHttpClient
+public sealed class TofuPilotHttpClient(HttpClient httpClient, JsonSerializerOptions? jsonOptions = null) : ITofuPilotHttpClient
 {
-    private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions _jsonOptions;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TofuPilotHttpClient"/> class.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use.</param>
-    public TofuPilotHttpClient(HttpClient httpClient)
-        : this(httpClient, null)
-    {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="TofuPilotHttpClient"/> class.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use.</param>
-    /// <param name="jsonOptions">Optional JSON serialization options. Defaults to TofuPilotJsonContext.</param>
-    public TofuPilotHttpClient(HttpClient httpClient, JsonSerializerOptions? jsonOptions)
-    {
-        _httpClient = httpClient;
-        _jsonOptions = jsonOptions ?? CreateDefaultOptions();
-    }
+    private readonly HttpClient _httpClient = httpClient;
+    private readonly JsonSerializerOptions _jsonOptions = jsonOptions ?? CreateDefaultOptions();
 
     private static JsonSerializerOptions CreateDefaultOptions()
     {
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
         options.TypeInfoResolverChain.Add(TofuPilotJsonContext.Default);
         return options;
@@ -100,10 +72,8 @@ public sealed class TofuPilotHttpClient : ITofuPilotHttpClient
         var responseBody = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
         if (response.IsSuccessStatusCode)
-        {
-            var result = JsonSerializer.Deserialize<TResponse>(responseBody, _jsonOptions);
-            return result ?? throw new TofuPilotException("Failed to deserialize response");
-        }
+            return JsonSerializer.Deserialize<TResponse>(responseBody, _jsonOptions)
+                   ?? throw new TofuPilotException("Failed to deserialize response");
 
         throw CreateException(response.StatusCode, responseBody);
     }
@@ -132,20 +102,18 @@ public sealed class TofuPilotHttpClient : ITofuPilotHttpClient
         try
         {
             using var doc = JsonDocument.Parse(responseBody);
-            if (doc.RootElement.TryGetProperty("message", out var message))
-            {
+            var root = doc.RootElement;
+
+            if (root.TryGetProperty("message", out var message))
                 return message.GetString();
-            }
-            if (doc.RootElement.TryGetProperty("error", out var error))
+
+            if (root.TryGetProperty("error", out var error))
             {
-                if (error.ValueKind == JsonValueKind.String)
-                {
-                    return error.GetString();
-                }
-                if (error.TryGetProperty("message", out var errorMessage))
-                {
-                    return errorMessage.GetString();
-                }
+                return error.ValueKind == JsonValueKind.String
+                    ? error.GetString()
+                    : error.TryGetProperty("message", out var errorMessage)
+                        ? errorMessage.GetString()
+                        : null;
             }
         }
         catch (JsonException)

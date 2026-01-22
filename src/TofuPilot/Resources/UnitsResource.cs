@@ -1,4 +1,3 @@
-using TofuPilot.Http;
 using TofuPilot.Models.Common;
 using TofuPilot.Models.Units;
 
@@ -7,25 +6,14 @@ namespace TofuPilot.Resources;
 /// <summary>
 /// Resource for managing units.
 /// </summary>
-public sealed class UnitsResource : ResourceBase
+public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
     protected override string BasePath => "/v2/units";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="UnitsResource"/> class.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use.</param>
-    public UnitsResource(ITofuPilotHttpClient httpClient) : base(httpClient)
-    {
-    }
-
-    /// <summary>
     /// Lists units with optional filtering.
     /// </summary>
-    /// <param name="request">The list request parameters.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A paginated list of units.</returns>
     public async Task<PaginatedResponse<Unit>> ListAsync(
         ListUnitsRequest? request = null,
         CancellationToken cancellationToken = default)
@@ -49,69 +37,36 @@ public sealed class UnitsResource : ResourceBase
     /// <summary>
     /// Creates a new unit.
     /// </summary>
-    /// <param name="request">The create request.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The created unit.</returns>
-    public async Task<Unit> CreateAsync(CreateUnitRequest request, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.PostAsync<CreateUnitRequest, Unit>(BasePath, request, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Unit> CreateAsync(CreateUnitRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreateUnitRequest, Unit>(BasePath, request, cancellationToken);
 
     /// <summary>
     /// Gets a unit by ID.
     /// </summary>
-    /// <param name="id">The unit ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The unit.</returns>
-    public async Task<Unit> GetAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.GetAsync<Unit>($"{BasePath}/{id}", cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Unit> GetAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Unit>($"{BasePath}/{id}", cancellationToken);
 
     /// <summary>
     /// Updates a unit.
     /// </summary>
-    /// <param name="id">The unit ID.</param>
-    /// <param name="request">The update request.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The updated unit.</returns>
-    public async Task<Unit> UpdateAsync(string id, UpdateUnitRequest request, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.PatchAsync<UpdateUnitRequest, Unit>($"{BasePath}/{id}", request, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Unit> UpdateAsync(string id, UpdateUnitRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdateUnitRequest, Unit>($"{BasePath}/{id}", request, cancellationToken);
 
     /// <summary>
     /// Deletes a unit by ID.
     /// </summary>
-    /// <param name="id">The unit ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The delete response.</returns>
-    public async Task<DeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken).ConfigureAwait(false);
-    }
+    public Task<DeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
 
     /// <summary>
     /// Adds a child unit to a parent unit.
     /// </summary>
-    /// <param name="parentId">The parent unit ID.</param>
-    /// <param name="childId">The child unit ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The updated parent unit.</returns>
-    public async Task<Unit> AddChildAsync(string parentId, string childId, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.PostAsync<object, Unit>($"{BasePath}/{parentId}/children/{childId}", new { }, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Unit> AddChildAsync(string parentId, string childId, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<object, Unit>($"{BasePath}/{parentId}/children/{childId}", new { }, cancellationToken);
 
     /// <summary>
     /// Removes a child unit from a parent unit.
     /// </summary>
-    /// <param name="parentId">The parent unit ID.</param>
-    /// <param name="childId">The child unit ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The updated parent unit.</returns>
-    public async Task<Unit> RemoveChildAsync(string parentId, string childId, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.DeleteAsync<Unit>($"{BasePath}/{parentId}/children/{childId}", cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Unit> RemoveChildAsync(string parentId, string childId, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<Unit>($"{BasePath}/{parentId}/children/{childId}", cancellationToken);
 }

@@ -1,4 +1,3 @@
-using TofuPilot.Http;
 using TofuPilot.Models.Common;
 using TofuPilot.Models.Runs;
 
@@ -7,25 +6,14 @@ namespace TofuPilot.Resources;
 /// <summary>
 /// Resource for managing test runs.
 /// </summary>
-public sealed class RunsResource : ResourceBase
+public sealed class RunsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
     protected override string BasePath => "/v2/runs";
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RunsResource"/> class.
-    /// </summary>
-    /// <param name="httpClient">The HTTP client to use.</param>
-    public RunsResource(ITofuPilotHttpClient httpClient) : base(httpClient)
-    {
-    }
-
-    /// <summary>
     /// Lists runs with optional filtering.
     /// </summary>
-    /// <param name="request">The list request parameters.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>A paginated list of runs.</returns>
     public async Task<PaginatedResponse<Run>> ListAsync(
         ListRunsRequest? request = null,
         CancellationToken cancellationToken = default)
@@ -66,50 +54,27 @@ public sealed class RunsResource : ResourceBase
     /// <summary>
     /// Creates a new run.
     /// </summary>
-    /// <param name="request">The create request.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The created run.</returns>
-    public async Task<Run> CreateAsync(CreateRunRequest request, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.PostAsync<CreateRunRequest, Run>(BasePath, request, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Run> CreateAsync(CreateRunRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreateRunRequest, Run>(BasePath, request, cancellationToken);
 
     /// <summary>
     /// Gets a run by ID.
     /// </summary>
-    /// <param name="id">The run ID.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The run.</returns>
-    public async Task<Run> GetAsync(string id, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.GetAsync<Run>($"{BasePath}/{id}", cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Run> GetAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Run>($"{BasePath}/{id}", cancellationToken);
 
     /// <summary>
     /// Updates a run.
     /// </summary>
-    /// <param name="id">The run ID.</param>
-    /// <param name="request">The update request.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The updated run.</returns>
-    public async Task<Run> UpdateAsync(string id, UpdateRunRequest request, CancellationToken cancellationToken = default)
-    {
-        return await HttpClient.PatchAsync<UpdateRunRequest, Run>($"{BasePath}/{id}", request, cancellationToken).ConfigureAwait(false);
-    }
+    public Task<Run> UpdateAsync(string id, UpdateRunRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdateRunRequest, Run>($"{BasePath}/{id}", request, cancellationToken);
 
     /// <summary>
     /// Deletes runs by IDs.
     /// </summary>
-    /// <param name="ids">The run IDs to delete.</param>
-    /// <param name="cancellationToken">Cancellation token.</param>
-    /// <returns>The delete response.</returns>
-    public async Task<DeleteResponse> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+    public Task<DeleteResponse> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
-        var queryParams = new Dictionary<string, object?>
-        {
-            ["ids"] = ids
-        };
-        var uri = BuildUriWithArrayParams(BasePath, queryParams);
-        return await HttpClient.DeleteAsync<DeleteResponse>(uri, cancellationToken).ConfigureAwait(false);
+        var uri = BuildUriWithArrayParams(BasePath, new Dictionary<string, object?> { ["ids"] = ids });
+        return HttpClient.DeleteAsync<DeleteResponse>(uri, cancellationToken);
     }
 }
