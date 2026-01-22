@@ -1,116 +1,162 @@
-# Contributing to Project
+# Contributing to TofuPilot C# SDK
 
-First off, thanks for taking the time to contribute!
+Thank you for your interest in contributing to the TofuPilot C# SDK!
+
+## About This Project
+
+This C# SDK was created with [Claude](https://claude.ai), Anthropic's AI assistant, as a port of the official [TofuPilot Python SDK](https://github.com/tofupilot/tofupilot).
 
 ## Code of Conduct
 
-This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to support@tofupilot.com.
+This project adheres to the Contributor Covenant code of conduct. By participating, you are expected to uphold this code. Please report unacceptable behavior to support@tofupilot.com.
+
+## Getting Started
+
+### Prerequisites
+
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- An IDE such as Visual Studio, VS Code, or JetBrains Rider
+
+### Setting Up the Development Environment
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/tofupilot/tofupilot-csharp.git
+   cd tofupilot-csharp
+   ```
+
+2. Restore dependencies:
+   ```bash
+   dotnet restore
+   ```
+
+3. Build the solution:
+   ```bash
+   dotnet build
+   ```
+
+4. Run tests:
+   ```bash
+   dotnet test
+   ```
+
+## Project Structure
+
+```
+tofupilot-csharp/
+├── src/
+│   ├── TofuPilot.Abstractions/    # Shared types, enums, exceptions
+│   ├── TofuPilot/                 # V2 Modern API
+│   └── TofuPilot.V1/              # V1 Legacy API
+├── tests/
+│   ├── TofuPilot.Tests/           # Unit tests
+│   └── TofuPilot.IntegrationTests/ # Integration tests
+└── py/                            # Original Python SDK (reference)
+```
 
 ## How to Contribute
 
 ### Reporting Bugs
 
-If you find a bug, please open an issue [here](https://github.com/tofupilot/python-client/issues) with detailed information on how to reproduce it.
+If you find a bug, please open an issue with detailed information on how to reproduce it.
 
 ### Suggesting Features
 
-You can suggest new features by opening an issue [here](https://github.com/tofupilot/python-client/issues).
+You can suggest new features by opening an issue.
 
 ### Submitting Pull Requests
 
-1. Fork the repository.
-2. Create a new branch (e.g., `feature/xyz`).
-3. Make your changes.
-4. Commit your changes **following the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format** to ensure correct tagging, release notes, and changelog:
-   - `fix:` for bug fixes (SemVer patch).
-   - `feat:` for new features (SemVer minor).
-   - `feat!:`, `fix!:`, etc., for breaking changes (SemVer major).
-5. Push to your branch.
-6. Create a pull request [here](https://github.com/tofupilot/python-client/pulls).
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/my-feature`)
+3. Make your changes
+4. Ensure all tests pass (`dotnet test`)
+5. Commit your changes using [Conventional Commits](https://www.conventionalcommits.org/):
+   - `fix:` for bug fixes (SemVer patch)
+   - `feat:` for new features (SemVer minor)
+   - `feat!:`, `fix!:`, etc., for breaking changes (SemVer major)
+   - `docs:` for documentation changes
+   - `test:` for test changes
+   - `refactor:` for refactoring
+6. Push to your fork (`git push origin feature/my-feature`)
+7. Open a Pull Request
 
-## Development Setup
+### Commit Message Format
 
-To set up a local development environment:
+```
+type(scope): description
 
-1. Clone the repo
-   ```bash
-   git clone https://github.com/tofupilot/python-client.git
-   ```
-2. Install dependencies
-   ```bash
-   pip install -r requirements.txt
-   ```
+[optional body]
 
-## Style Guide
-
-Please follow PEP 8 guidelines for Python code.
-
-## Testing
-
-To run tests, use:
-
-```bash
-pytest
+[optional footer]
 ```
 
-## How is the package published?
+Examples:
+```
+feat(runs): add support for batch deletion
+fix(http): handle timeout exceptions properly
+docs: update README with new examples
+```
 
-TofuPilot is available on [PyPI](https://pypi.org/project/tofupilot/). Version publishing is handled via and [Twine](https://twine.readthedocs.io/en/stable/) through GitHub Actions on a separate repo.
+## Development Guidelines
 
-### Testing the Python Client locally
+### Code Style
 
-1. Create a new branch for testing your changes.  
-2. Apply any changes to the code as needed.  
-3. In `pyproject.toml`, update the following line:  
-   ```python
-   version = "X.Y.Z"
-   ```  
-   to:  
-   ```python
-   version = "X.Y.Z.dev0"
+- Follow standard C# naming conventions
+- Use nullable reference types (`#nullable enable`)
+- All public APIs should have XML documentation comments
+- Use `async`/`await` for all I/O operations
+
+### Testing
+
+- Write unit tests for all new functionality
+- Use xUnit as the testing framework
+- Use FluentAssertions for assertions
+- Use Moq for mocking dependencies
+
+### Running Integration Tests
+
+Integration tests require environment variables:
+
+```bash
+export TOFUPILOT_URL="https://www.tofupilot.com"
+export TOFUPILOT_API_KEY="your-api-key"
+export TOFUPILOT_PROCEDURE_ID="your-procedure-id"
+
+dotnet test tests/TofuPilot.IntegrationTests
+```
+
+## How is the Package Published?
+
+TofuPilot C# SDK is published to [NuGet](https://www.nuget.org/packages/TofuPilot). Version publishing is handled through GitHub Actions.
+
+### Testing Locally
+
+1. Create a new branch for testing your changes
+2. Apply any changes to the code as needed
+3. In `Directory.Build.props`, update the version:
+   ```xml
+   <Version>X.Y.Z-dev</Version>
    ```
-
-4. Run:  
-   ```sh
-   rm -rf dist/*
+4. Build the package:
+   ```bash
+   dotnet pack -c Release
    ```
+5. The `.nupkg` files will be in `src/*/bin/Release/`
 
-5. Run:  
-   ```sh
-   python -m build
-   ```
+### Releasing a Production Version
 
-6. Install your new version locally in your project [using pip](https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-from-a-local-src-tree)
+Only members of the TofuPilot team are allowed to trigger new releases (which automatically upload to NuGet).
 
-### Releasing a test version of the Python Client
+To trigger an automatic release:
+1. Update the version in `Directory.Build.props`
+2. Merge to main
 
-If you need to test a new version of the Python client before making an official release, you can publish it to TestPyPI, a sandbox version of PyPI used for testing package distributions.
+## Questions?
 
-1. If a previous test package with the exact same version was released, update the version in `pyproject.toml`. For instance, change version = "X.Y.Z.dev0" to version = "X.Y.Z.dev1".
-2. Build the package locally using:
-   ```sh
-   rm -rf dist/*
-   python -m build
-   ```
-   This will generate distribution files in the dist/ directory.
+If you have questions, feel free to:
+- Open an issue on GitHub
+- Contact us at support@tofupilot.com
 
-3. Get a testpypi API key, for example ask your managment if they have one.
+## License
 
-   Then run:
-   ```sh
-   twine upload --repository testpypi dist/*
-   ```
- 
-4. To install the new test package, run:
-   ```sh
-   pip install -i https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ tofupilot==<exact-version>
-   ```
-
-### Releasing a production version of the Python Client
-
-Only members of the TofuPilot team are allowed to trigger new releases (which automatically upload to PyPI).
-
-However, contributions are always welcome! If you'd like to help improve the project, feel free to open an issue or submit a pull request. We appreciate your input.
-
-To trigger automatic release (upload to PyPI and creation of version tag), it is enough to change the version in `pyproject.toml` and merging to main.
-It is better however to also include a written description of the changes in the README.md
+By contributing, you agree that your contributions will be licensed under the MIT License.
