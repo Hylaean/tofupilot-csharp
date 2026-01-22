@@ -1,0 +1,16 @@
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/bin/Debug/net8.0/TofuPilot.V1.deps.json
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/bin/Debug/net8.0/TofuPilot.V1.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/bin/Debug/net8.0/TofuPilot.V1.pdb
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/bin/Debug/net8.0/TofuPilot.Abstractions.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/bin/Debug/net8.0/TofuPilot.Abstractions.pdb
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.csproj.AssemblyReference.cache
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.AssemblyInfoInputs.cache
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.AssemblyInfo.cs
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.csproj.CoreCompileInputs.cache
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.sourcelink.json
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilo.67AB93A3.Up2Date
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/refint/TofuPilot.V1.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/TofuPilot.V1.pdb
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.V1/obj/Debug/net8.0/ref/TofuPilot.V1.dll

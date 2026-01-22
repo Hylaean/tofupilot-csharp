@@ -1,0 +1,12 @@
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/bin/Debug/net8.0/TofuPilot.Abstractions.deps.json
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/bin/Debug/net8.0/TofuPilot.Abstractions.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/bin/Debug/net8.0/TofuPilot.Abstractions.pdb
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.GeneratedMSBuildEditorConfig.editorconfig
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.AssemblyInfoInputs.cache
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.AssemblyInfo.cs
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.csproj.CoreCompileInputs.cache
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.sourcelink.json
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/refint/TofuPilot.Abstractions.dll
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/TofuPilot.Abstractions.pdb
+/Users/jeanllorca/tofupilot-csharp/src/TofuPilot.Abstractions/obj/Debug/net8.0/ref/TofuPilot.Abstractions.dll

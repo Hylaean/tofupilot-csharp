@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>TofuPilot.Abstractions</PackageId>
+    <Description>Shared abstractions, models, and exceptions for TofuPilot SDK</Description>
+    <PackageTags>tofupilot;hardware-testing;manufacturing;sdk;abstractions</PackageTags>
+  </PropertyGroup>
+
+</Project>

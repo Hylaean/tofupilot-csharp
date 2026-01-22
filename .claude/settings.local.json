@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(wc:*)",
+      "Bash(dotnet restore:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dotnet test:*)",
+      "Bash(git -C /Users/jeanllorca/tofupilot-csharp status)",
+      "Bash(git -C /Users/jeanllorca/tofupilot-csharp diff)",
+      "Bash(git -C /Users/jeanllorca/tofupilot-csharp log --oneline -5)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git -C /Users/jeanllorca/tofupilot-csharp add -A)"
+    ]
+  }
+}
