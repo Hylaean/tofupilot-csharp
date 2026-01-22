@@ -14,7 +14,7 @@ This project adheres to the Contributor Covenant code of conduct. By participati
 
 ### Prerequisites
 
-- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) or later
 - An IDE such as Visual Studio, VS Code, or JetBrains Rider
 
 ### Setting Up the Development Environment

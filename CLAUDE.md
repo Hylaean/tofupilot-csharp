@@ -135,7 +135,7 @@ var response = await client.CreateRunAsync(
 
 ## Conventions
 
-- **Target Framework**: .NET 8.0
+- **Target Framework**: .NET 10.0
 - **Commit format**: Conventional Commits (`fix:`, `feat:`, `feat!:` for breaking)
 - **Code style**: C# conventions, nullable reference types enabled
 - **Async**: All HTTP operations are async with cancellation token support
