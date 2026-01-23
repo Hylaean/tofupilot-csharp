@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
 
-The official open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickly and seamlessly integrate all your hardware test runs into one app with just a few lines of C#.
+The unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickly and seamlessly integrate all your hardware test runs into one app with just a few lines of C#.
 
 > **Note**: This C# SDK was created with [Claude](https://claude.ai), Anthropic's AI assistant, as a port of the official [Python SDK](https://github.com/tofupilot/tofupilot).
 
