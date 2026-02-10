@@ -9,6 +9,13 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Create a release and publish to NuGet'
+        required: false
+        type: boolean
+        default: false
 
 env:
   DOTNET_VERSION: '10.0.x'
@@ -40,7 +47,9 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: >-
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'))
+      || (github.event_name == 'workflow_dispatch' && inputs.release)
     permissions:
       contents: write
 
@@ -86,4 +95,5 @@ jobs:
           tag_name: v${{ steps.gitversion.outputs.semVer }}
           name: v${{ steps.gitversion.outputs.semVer }}
           generate_release_notes: true
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
           files: ./nupkgs/*.nupkg
