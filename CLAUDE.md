@@ -74,7 +74,7 @@ tofupilot-csharp/
 ├── tests/
 │   ├── TofuPilot.Tests/                   # Unit tests
 │   └── TofuPilot.IntegrationTests/        # Integration tests
-├── TofuPilot.sln
+├── TofuPilot.slnx
 ├── Directory.Build.props                  # Shared build properties
 └── CLAUDE.md
 ```
