@@ -38,6 +38,9 @@ nunit-*.xml
 *.coveragexml
 coverage/
 
+# Local secrets
+.local/
+
 # Claude Code
 .claude/settings.local.json
 
