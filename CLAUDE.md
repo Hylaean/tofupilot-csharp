@@ -59,18 +59,13 @@ tofupilot-csharp/
 │   │   ├── Configuration/                 # TofuPilotOptions, RetryOptions
 │   │   ├── Exceptions/                    # TofuPilotException, API exceptions
 │   │   └── Models/Enums/                  # RunOutcome, PhaseOutcome, etc.
-│   ├── TofuPilot/                         # V2 Modern API
-│   │   ├── Configuration/                 # DI extensions
-│   │   ├── Http/                          # HTTP client, handlers
-│   │   ├── Models/                        # Request/response models
-│   │   ├── Resources/                     # API resource clients
-│   │   ├── Serialization/                 # JSON serialization context
-│   │   └── TofuPilotClient.cs             # Main entry point
-│   └── TofuPilot.V1/                      # V1 Legacy API
-│       ├── Constants/                     # API constants
-│       ├── Models/                        # V1 models (snake_case)
-│       ├── Utils/                         # File validation, datetime helpers
-│       └── TofuPilotV1Client.cs           # Legacy client
+│   └── TofuPilot/                         # Main API
+│       ├── Configuration/                 # DI extensions
+│       ├── Http/                          # HTTP client, handlers
+│       ├── Models/                        # Request/response models
+│       ├── Resources/                     # API resource clients
+│       ├── Serialization/                 # JSON serialization context
+│       └── TofuPilotClient.cs             # Main entry point
 ├── tests/
 │   ├── TofuPilot.Tests/                   # Unit tests
 │   └── TofuPilot.IntegrationTests/        # Integration tests
@@ -79,25 +74,9 @@ tofupilot-csharp/
 └── CLAUDE.md
 ```
 
-### Dual API Support
-
-The SDK supports two API versions:
-
-**V2 (Modern)** - `TofuPilot/`
-- Clean resource-based API design
-- Uses `HttpClient` with `IHttpClientFactory` for DI support
-- `System.Text.Json` with source generators
-- Retry with exponential backoff via custom handler
-- 8 resource groups: Runs, Units, Procedures, Parts, Batches, Stations, Attachments, Versions
-
-**V1 (Legacy)** - `TofuPilot.V1/`
-- Simple client for backward compatibility
-- Direct HTTP handling
-- Snake_case JSON naming (matches legacy Python API)
-
 ### Key Components
 
-**TofuPilotClient (V2)**
+**TofuPilotClient**
 ```csharp
 // Direct instantiation
 using var client = new TofuPilotClient(apiKey: "your-key");
@@ -110,16 +89,7 @@ services.AddTofuPilot(options => {
 });
 ```
 
-**TofuPilotV1Client (Legacy)**
-```csharp
-using var client = new TofuPilotV1Client(apiKey: "your-key");
-var response = await client.CreateRunAsync(
-    unitUnderTest: new UnitUnderTest { SerialNumber = "SN001" },
-    runPassed: true,
-    procedureName: "My Test");
-```
-
-### V2 API Methods
+### API Methods
 
 | Resource | Methods |
 |----------|---------|

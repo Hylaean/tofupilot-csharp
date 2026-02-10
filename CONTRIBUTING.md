@@ -46,8 +46,7 @@ This project adheres to the Contributor Covenant code of conduct. By participati
 tofupilot-csharp/
 ├── src/
 │   ├── TofuPilot.Abstractions/    # Shared types, enums, exceptions
-│   ├── TofuPilot/                 # V2 Modern API
-│   └── TofuPilot.V1/              # V1 Legacy API
+│   └── TofuPilot/                 # Main API
 ├── tests/
 │   ├── TofuPilot.Tests/           # Unit tests
 │   └── TofuPilot.IntegrationTests/ # Integration tests

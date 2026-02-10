@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\TofuPilot\TofuPilot.csproj" />
-    <ProjectReference Include="..\..\src\TofuPilot.V1\TofuPilot.V1.csproj" />
   </ItemGroup>
 
 </Project>

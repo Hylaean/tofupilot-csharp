@@ -13,7 +13,6 @@ The unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickl
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [V2 API (Modern)](#v2-api-modern)
-- [V1 API (Legacy)](#v1-api-legacy)
 - [Dependency Injection](#dependency-injection)
 - [Available Resources](#available-resources)
 - [Error Handling](#error-handling)
@@ -153,48 +152,6 @@ var version = await client.Procedures.Versions.CreateAsync(
     procedureId: procedure.Id,
     new CreateVersionRequest { Name = "v1.0.0" }
 );
-```
-
-## V1 API (Legacy)
-
-The V1 API provides backward compatibility with the original TofuPilot API.
-
-```csharp
-using TofuPilot.V1;
-using TofuPilot.V1.Models;
-
-using var client = new TofuPilotV1Client(apiKey: "your-api-key");
-
-var response = await client.CreateRunAsync(
-    unitUnderTest: new UnitUnderTest
-    {
-        SerialNumber = "SN-001",
-        PartNumber = "PART-A"
-    },
-    runPassed: true,
-    procedureName: "My Test Procedure",
-    phases: new List<Phase>
-    {
-        new()
-        {
-            Name = "Phase 1",
-            Outcome = "PASS",
-            Measurements = new List<Measurement>
-            {
-                new()
-                {
-                    Name = "Temperature",
-                    MeasuredValue = 25.5,
-                    Units = "C",
-                    LowerLimit = 20.0,
-                    UpperLimit = 30.0
-                }
-            }
-        }
-    }
-);
-
-Console.WriteLine($"Run URL: {response.ReportUrl}");
 ```
 
 ## Dependency Injection
