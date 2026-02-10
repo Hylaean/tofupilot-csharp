@@ -9,6 +9,13 @@ on:
     branches:
       - main
       - develop
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Create a release and publish to NuGet'
+        required: false
+        type: boolean
+        default: false
 
 env:
   DOTNET_VERSION: '10.0.x'
@@ -19,12 +26,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -40,27 +47,46 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: >-
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'))
+      || (github.event_name == 'workflow_dispatch' && inputs.release)
     permissions:
       contents: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.1.11
+        uses: gittools/actions/gitversion/setup@v4
         with:
           versionSpec: '6.x'
 
       - name: Determine version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v3.1.11
+        uses: gittools/actions/gitversion/execute@v4
+
+      - name: Version summary
+        run: |
+          IS_PRERELEASE=${{ github.ref != 'refs/heads/main' }}
+          echo "## Version: v${{ steps.gitversion.outputs.semVer }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Property | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **SemVer** | \`${{ steps.gitversion.outputs.semVer }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **FullSemVer** | \`${{ steps.gitversion.outputs.fullSemVer }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **NuGetVersion** | \`${{ steps.gitversion.outputs.majorMinorPatch }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **PreReleaseLabel** | \`${{ steps.gitversion.outputs.preReleaseLabel }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Branch** | \`${{ github.ref_name }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Commit** | \`${{ steps.gitversion.outputs.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Pre-release?** | \`${IS_PRERELEASE}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Publish to NuGet** | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| **GitHub Release** | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -86,4 +112,5 @@ jobs:
           tag_name: v${{ steps.gitversion.outputs.semVer }}
           name: v${{ steps.gitversion.outputs.semVer }}
           generate_release_notes: true
+          prerelease: ${{ github.ref != 'refs/heads/main' }}
           files: ./nupkgs/*.nupkg
