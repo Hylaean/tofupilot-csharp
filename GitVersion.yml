@@ -8,6 +8,7 @@ branches:
     regex: ^develop$
     increment: Minor
     label: beta
+    is-main-branch: false
   feature:
     regex: ^feature[/-]
     increment: Inherit
