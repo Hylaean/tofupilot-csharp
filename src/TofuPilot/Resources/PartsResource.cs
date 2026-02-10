@@ -1,0 +1,76 @@
+using TofuPilot.Models.Common;
+using TofuPilot.Models.Parts;
+
+namespace TofuPilot.Resources;
+
+/// <summary>
+/// Resource for managing parts.
+/// </summary>
+public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
+{
+    /// <inheritdoc/>
+    protected override string BasePath => "/v2/parts";
+
+    /// <summary>Gets the revisions sub-resource.</summary>
+    public PartRevisionsResource Revisions { get; } = new(httpClient);
+
+    /// <summary>Lists parts with optional filtering.</summary>
+    public async Task<PaginatedResponse<Part>> ListAsync(
+        ListPartsRequest? request = null,
+        CancellationToken cancellationToken = default)
+    {
+        request ??= new ListPartsRequest();
+
+        var queryParams = new Dictionary<string, object?>
+        {
+            ["searchQuery"] = request.SearchQuery,
+            ["ids"] = request.Ids,
+            ["limit"] = request.Limit?.ToString(),
+            ["cursor"] = request.Cursor?.ToString(),
+        };
+
+        var uri = BuildUriWithArrayParams(BasePath, queryParams);
+        return await HttpClient.GetAsync<PaginatedResponse<Part>>(uri, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Creates a new part.</summary>
+    public Task<Part> CreateAsync(CreatePartRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreatePartRequest, Part>(BasePath, request, cancellationToken);
+
+    /// <summary>Gets a part by ID.</summary>
+    public Task<Part> GetAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Part>($"{BasePath}/{id}", cancellationToken);
+
+    /// <summary>Updates a part.</summary>
+    public Task<Part> UpdateAsync(string id, UpdatePartRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdatePartRequest, Part>($"{BasePath}/{id}", request, cancellationToken);
+}
+
+/// <summary>
+/// Resource for managing part revisions.
+/// </summary>
+public sealed class PartRevisionsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
+{
+    /// <inheritdoc/>
+    protected override string BasePath => "/v2/parts";
+
+    /// <summary>Lists revisions for a part.</summary>
+    public Task<PaginatedResponse<PartRevision>> ListAsync(string partId, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<PaginatedResponse<PartRevision>>($"{BasePath}/{partId}/revisions", cancellationToken);
+
+    /// <summary>Creates a new revision for a part.</summary>
+    public Task<PartRevision> CreateAsync(string partId, CreatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreatePartRevisionRequest, PartRevision>($"{BasePath}/{partId}/revisions", request, cancellationToken);
+
+    /// <summary>Gets a part revision by ID.</summary>
+    public Task<PartRevision> GetAsync(string partId, string revisionId, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<PartRevision>($"{BasePath}/{partId}/revisions/{revisionId}", cancellationToken);
+
+    /// <summary>Updates a part revision.</summary>
+    public Task<PartRevision> UpdateAsync(string partId, string revisionId, UpdatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdatePartRevisionRequest, PartRevision>($"{BasePath}/{partId}/revisions/{revisionId}", request, cancellationToken);
+
+    /// <summary>Deletes a part revision.</summary>
+    public Task<DeleteResponse> DeleteAsync(string partId, string revisionId, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{partId}/revisions/{revisionId}", cancellationToken);
+}
