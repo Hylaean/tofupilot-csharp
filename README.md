@@ -267,6 +267,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Python SDK](https://github.com/tofupilot/tofupilot)
 - [Examples](https://github.com/tofupilot/examples)
 
-## Contact
-
-If you have any questions or feedback, feel free to open an issue or contact us at support@tofupilot.com.
