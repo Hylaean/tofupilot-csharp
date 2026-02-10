@@ -106,4 +106,4 @@ services.AddTofuPilot(options => {
 - **Code style**: C# conventions, nullable reference types enabled
 - **Async**: All HTTP operations are async with cancellation token support
 - **Models**: C# records for immutable request/response types
-- **Version**: Updated in `Directory.Build.props`, triggers NuGet publish on merge to main
+- **Version**: Automated via GitVersion.MsBuild from git history (see `GitVersion.yml`)
