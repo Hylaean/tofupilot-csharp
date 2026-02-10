@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 TofuPilot C# SDK - Official open-source C# SDK for the TofuPilot hardware testing platform. Manages test runs, units, procedures, parts, batches, and stations. Published on NuGet as `TofuPilot`.
 
-The repository also contains the original Python SDK under `py/` for reference.
-
 ## Build and Development Commands
 
 ```bash
@@ -52,8 +50,6 @@ Unit tests can be run without environment variables.
 
 ```
 tofupilot-csharp/
-├── py/                                    # Original Python SDK (reference)
-│   └── tofupilot/
 ├── src/
 │   ├── TofuPilot.Abstractions/            # Shared types, enums, exceptions
 │   │   ├── Configuration/                 # TofuPilotOptions, RetryOptions
@@ -111,13 +107,3 @@ services.AddTofuPilot(options => {
 - **Async**: All HTTP operations are async with cancellation token support
 - **Models**: C# records for immutable request/response types
 - **Version**: Updated in `Directory.Build.props`, triggers NuGet publish on merge to main
-
-## Python SDK Reference
-
-The original Python SDK is preserved in `py/` for reference. To work with it:
-
-```bash
-cd py
-pip install -e ".[dev]"
-pytest
-```

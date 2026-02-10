@@ -50,7 +50,6 @@ tofupilot-csharp/
 ├── tests/
 │   ├── TofuPilot.Tests/           # Unit tests
 │   └── TofuPilot.IntegrationTests/ # Integration tests
-└── py/                            # Original Python SDK (reference)
 ```
 
 ## How to Contribute
