@@ -3,4 +3,5 @@
   <Project Path="src/TofuPilot/TofuPilot.csproj" />
   <Project Path="tests/TofuPilot.Tests/TofuPilot.Tests.csproj" />
   <Project Path="tests/TofuPilot.IntegrationTests/TofuPilot.IntegrationTests.csproj" />
+  <Project Path="tools/TofuPilot.Cleanup/TofuPilot.Cleanup.csproj" />
 </Solution>

@@ -44,6 +44,10 @@ public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBas
     /// <summary>Updates a part.</summary>
     public Task<Part> UpdateAsync(string id, UpdatePartRequest request, CancellationToken cancellationToken = default) =>
         HttpClient.PatchAsync<UpdatePartRequest, Part>($"{BasePath}/{id}", request, cancellationToken);
+
+    /// <summary>Deletes a part by part number.</summary>
+    public Task<DeleteResponse> DeleteAsync(string partNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{partNumber}", cancellationToken);
 }
 
 /// <summary>

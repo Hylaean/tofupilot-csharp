@@ -15,6 +15,7 @@ namespace TofuPilot.IntegrationTests;
 
 /// <summary>
 /// Comprehensive integration tests that exercise every v2 API endpoint.
+/// All test entities are prefixed with "tfcs-" for easy identification and cleanup.
 /// Requires environment variables:
 /// - TOFUPILOT_URL: The TofuPilot server URL
 /// - TOFUPILOT_API_KEY: A valid API key
@@ -49,13 +50,13 @@ public class FullApiIntegrationTests : IDisposable
     {
         if (!_canRunTests) return;
 
-        var partNumber = $"PART-{_testId}";
+        var partNumber = $"tfcs-part-{_testId}";
 
         // Create
         var part = await _client!.Parts.CreateAsync(new CreatePartRequest
         {
             PartNumber = partNumber,
-            Name = "Integration Test Part",
+            Name = "tfcs integration test part",
             Description = "Created by integration test"
         });
         part.Should().NotBeNull();
@@ -70,12 +71,12 @@ public class FullApiIntegrationTests : IDisposable
         var retrieved = await _client.Parts.GetAsync(partNumber);
         retrieved.Id.Should().Be(part.Id);
         retrieved.PartNumber.Should().Be(partNumber);
-        retrieved.Name.Should().Be("Integration Test Part");
+        retrieved.Name.Should().Be("tfcs integration test part");
 
         // Update (uses part number)
         var updated = await _client.Parts.UpdateAsync(partNumber, new UpdatePartRequest
         {
-            Name = "Updated Integration Test Part"
+            Name = "tfcs updated integration test part"
         });
         updated.Should().NotBeNull();
     }
@@ -85,13 +86,13 @@ public class FullApiIntegrationTests : IDisposable
     {
         if (!_canRunTests) return;
 
-        var partNumber = $"PARTREV-{_testId}";
+        var partNumber = $"tfcs-partrev-{_testId}";
 
         // Setup: create a part
         await _client!.Parts.CreateAsync(new CreatePartRequest
         {
             PartNumber = partNumber,
-            Name = "Part for Revision Test"
+            Name = "tfcs part for revision test"
         });
 
         // Create revision (uses part number)
@@ -127,7 +128,7 @@ public class FullApiIntegrationTests : IDisposable
         // Create
         var procedure = await _client!.Procedures.CreateAsync(new CreateProcedureRequest
         {
-            Name = $"Procedure-{_testId}",
+            Name = $"tfcs-proc-{_testId}",
             Description = "Integration test procedure"
         });
         procedure.Should().NotBeNull();
@@ -141,12 +142,12 @@ public class FullApiIntegrationTests : IDisposable
         // Get (uses UUID)
         var retrieved = await _client.Procedures.GetAsync(procedure.Id);
         retrieved.Id.Should().Be(procedure.Id);
-        retrieved.Name.Should().Be($"Procedure-{_testId}");
+        retrieved.Name.Should().Be($"tfcs-proc-{_testId}");
 
         // Update (name is required by the API)
         var updated = await _client.Procedures.UpdateAsync(procedure.Id, new UpdateProcedureRequest
         {
-            Name = $"Procedure-{_testId}-Updated",
+            Name = $"tfcs-proc-{_testId}-updated",
             Description = "Updated description"
         });
         updated.Should().NotBeNull();
@@ -163,7 +164,7 @@ public class FullApiIntegrationTests : IDisposable
         // Setup: create a procedure
         var procedure = await _client!.Procedures.CreateAsync(new CreateProcedureRequest
         {
-            Name = $"ProcVer-{_testId}"
+            Name = $"tfcs-procver-{_testId}"
         });
 
         try
@@ -192,6 +193,7 @@ public class FullApiIntegrationTests : IDisposable
     }
 
     [Fact]
+    [Trait("Category", "Costly")]
     public async Task Stations_FullLifecycle()
     {
         if (!_canRunTests) return;
@@ -199,7 +201,7 @@ public class FullApiIntegrationTests : IDisposable
         // Create station
         var station = await _client!.Stations.CreateAsync(new CreateStationRequest
         {
-            Name = $"Station-{_testId}",
+            Name = $"tfcs-station-{_testId}",
             Description = "Integration test station"
         });
         station.Should().NotBeNull();
@@ -231,7 +233,7 @@ public class FullApiIntegrationTests : IDisposable
     {
         if (!_canRunTests) return;
 
-        var batchNumber = $"BATCH-{_testId}";
+        var batchNumber = $"tfcs-batch-{_testId}";
 
         // Create
         var batch = await _client!.Batches.CreateAsync(new CreateBatchRequest
@@ -254,12 +256,12 @@ public class FullApiIntegrationTests : IDisposable
         // Update (uses batch number)
         var updated = await _client.Batches.UpdateAsync(batchNumber, new UpdateBatchRequest
         {
-            BatchNumber = $"BATCH-{_testId}-UPD"
+            BatchNumber = $"tfcs-batch-{_testId}-upd"
         });
         updated.Should().NotBeNull();
 
         // Delete (uses batch number — updated one)
-        var deleteResult = await _client.Batches.DeleteAsync($"BATCH-{_testId}-UPD");
+        var deleteResult = await _client.Batches.DeleteAsync($"tfcs-batch-{_testId}-upd");
         deleteResult.Should().NotBeNull();
     }
 
@@ -268,15 +270,15 @@ public class FullApiIntegrationTests : IDisposable
     {
         if (!_canRunTests) return;
 
-        var partNumber = $"UPART-{_testId}";
-        var parentSn = $"PARENT-{_testId}";
-        var childSn = $"CHILD-{_testId}";
+        var partNumber = $"tfcs-upart-{_testId}";
+        var parentSn = $"tfcs-parent-{_testId}";
+        var childSn = $"tfcs-child-{_testId}";
 
         // Setup: create a part (needed for unit creation)
         await _client!.Parts.CreateAsync(new CreatePartRequest
         {
             PartNumber = partNumber,
-            Name = "Part for Unit Test"
+            Name = "tfcs part for unit test"
         });
 
         // Create parent unit (uses part number + default revision "A")
@@ -311,10 +313,10 @@ public class FullApiIntegrationTests : IDisposable
         // Update (uses serial number)
         var updated = await _client.Units.UpdateAsync(parentSn, new UpdateUnitRequest
         {
-            SerialNumber = $"PARENT-{_testId}-UPD"
+            SerialNumber = $"tfcs-parent-{_testId}-upd"
         });
         updated.Should().NotBeNull();
-        var updatedParentSn = $"PARENT-{_testId}-UPD";
+        var updatedParentSn = $"tfcs-parent-{_testId}-upd";
 
         // Add child (uses serial numbers)
         var withChild = await _client.Units.AddChildAsync(updatedParentSn, childSn);
@@ -337,18 +339,18 @@ public class FullApiIntegrationTests : IDisposable
         // Setup: create a procedure and a part for the run
         var procedure = await _client!.Procedures.CreateAsync(new CreateProcedureRequest
         {
-            Name = $"RunProc-{_testId}"
+            Name = $"tfcs-runproc-{_testId}"
         });
-        var runPartNumber = $"RUNPART-{_testId}";
+        var runPartNumber = $"tfcs-runpart-{_testId}";
         await _client.Parts.CreateAsync(new CreatePartRequest
         {
             PartNumber = runPartNumber,
-            Name = "Part for Run Test"
+            Name = "tfcs part for run test"
         });
 
         try
         {
-            var serialNumber = $"RUN-SN-{_testId}";
+            var serialNumber = $"tfcs-runsn-{_testId}";
             var startedAt = DateTimeOffset.UtcNow.AddMinutes(-5);
             var endedAt = DateTimeOffset.UtcNow;
 
@@ -455,7 +457,7 @@ public class FullApiIntegrationTests : IDisposable
         // Initialize upload
         var upload = await _client!.Attachments.InitializeAsync(new InitializeUploadRequest
         {
-            FileName = $"test-{_testId}.txt"
+            FileName = $"tfcs-test-{_testId}.txt"
         });
         upload.Should().NotBeNull();
         upload.Id.Should().NotBeNullOrEmpty();
@@ -467,16 +469,16 @@ public class FullApiIntegrationTests : IDisposable
     {
         if (!_canRunTests) return;
 
-        var partNumber = $"E2E-PART-{_testId}";
-        var batchNumber = $"E2E-BATCH-{_testId}";
-        var unitSn = $"E2E-UNIT-{_testId}";
-        var subUnitSn = $"E2E-SUB-{_testId}";
+        var partNumber = $"tfcs-e2e-part-{_testId}";
+        var batchNumber = $"tfcs-e2e-batch-{_testId}";
+        var unitSn = $"tfcs-e2e-unit-{_testId}";
+        var subUnitSn = $"tfcs-e2e-sub-{_testId}";
 
         // 1. Create a part
         await _client!.Parts.CreateAsync(new CreatePartRequest
         {
             PartNumber = partNumber,
-            Name = "E2E Test Part"
+            Name = "tfcs e2e test part"
         });
 
         // 2. Create a part revision (uses part number)
@@ -495,7 +497,7 @@ public class FullApiIntegrationTests : IDisposable
         // 4. Create a procedure
         var procedure = await _client.Procedures.CreateAsync(new CreateProcedureRequest
         {
-            Name = $"E2E-Procedure-{_testId}",
+            Name = $"tfcs-e2e-proc-{_testId}",
             Description = "End-to-end test procedure"
         });
 
@@ -505,14 +507,7 @@ public class FullApiIntegrationTests : IDisposable
             Tag = "2.0.0"
         });
 
-        // 6. Create a station
-        var station = await _client.Stations.CreateAsync(new CreateStationRequest
-        {
-            Name = $"E2E-Station-{_testId}",
-            Description = "End-to-end test station"
-        });
-
-        // 7. Create a unit with part, revision, and batch
+        // 6. Create a unit with part, revision, and batch
         await _client.Units.CreateAsync(new CreateUnitRequest
         {
             SerialNumber = unitSn,
@@ -521,7 +516,7 @@ public class FullApiIntegrationTests : IDisposable
             BatchNumber = batchNumber
         });
 
-        // 8. Create a sub-unit and establish parent-child relationship
+        // 7. Create a sub-unit and establish parent-child relationship
         await _client.Units.CreateAsync(new CreateUnitRequest
         {
             SerialNumber = subUnitSn,
@@ -530,7 +525,7 @@ public class FullApiIntegrationTests : IDisposable
         });
         await _client.Units.AddChildAsync(unitSn, subUnitSn);
 
-        // 9. Create a run tying everything together
+        // 8. Create a run tying everything together
         var startedAt = DateTimeOffset.UtcNow.AddMinutes(-2);
         var endedAt = DateTimeOffset.UtcNow;
         var run = await _client.Runs.CreateAsync(new CreateRunRequest
@@ -579,16 +574,16 @@ public class FullApiIntegrationTests : IDisposable
             }
         });
 
-        // 10. Verify the run was created (uses UUID)
+        // 9. Verify the run was created (uses UUID)
         var retrieved = await _client.Runs.GetAsync(run.Id);
         retrieved.Id.Should().Be(run.Id);
         retrieved.Outcome.Should().Be(RunOutcome.PASS);
         retrieved.Phases.Should().NotBeNullOrEmpty();
 
-        // 11. Initialize an attachment
+        // 10. Initialize an attachment
         var upload = await _client.Attachments.InitializeAsync(new InitializeUploadRequest
         {
-            FileName = "e2e-report.pdf"
+            FileName = "tfcs-e2e-report.pdf"
         });
         upload.UploadUrl.Should().NotBeNullOrEmpty();
 
@@ -597,7 +592,6 @@ public class FullApiIntegrationTests : IDisposable
         await TryCleanupAsync(() => _client.Units.RemoveChildAsync(unitSn, subUnitSn));
         await TryCleanupAsync(() => _client.Units.DeleteAsync(subUnitSn));
         await TryCleanupAsync(() => _client.Units.DeleteAsync(unitSn));
-        await TryCleanupAsync(() => _client.Stations.RemoveAsync(station.Id));
         await TryCleanupAsync(() => _client.Procedures.Versions.DeleteAsync(procedure.Id, "2.0.0"));
         await TryCleanupAsync(() => _client.Procedures.DeleteAsync(procedure.Id));
         await TryCleanupAsync(() => _client.Batches.DeleteAsync(batchNumber));

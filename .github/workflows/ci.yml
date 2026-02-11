@@ -41,8 +41,19 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
-      - name: Run tests
-        run: dotnet test --configuration Release --no-build --verbosity normal
+      - name: Run unit tests
+        run: dotnet test --configuration Release --no-build --verbosity normal --filter "Category!=Integration"
+
+      - name: Run integration tests
+        if: env.TOFUPILOT_API_KEY != ''
+        run: dotnet test --configuration Release --no-build --verbosity normal --filter "Category=Integration&Category!=Costly"
+        env:
+          TOFUPILOT_API_KEY: ${{ secrets.TOFUPILOT_API_KEY }}
+
+      - name: Cleanup test entities
+        if: always() && env.TOFUPILOT_API_KEY != ''
+        continue-on-error: true
+        run: dotnet run --project tools/TofuPilot.Cleanup/TofuPilot.Cleanup.csproj
         env:
           TOFUPILOT_API_KEY: ${{ secrets.TOFUPILOT_API_KEY }}
 
