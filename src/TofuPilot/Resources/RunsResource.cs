@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class RunsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/runs";
+    protected override string BasePath => "v2/runs";
 
     /// <summary>
     /// Lists runs with optional filtering.
@@ -22,29 +22,29 @@ public sealed class RunsResource(ITofuPilotHttpClient httpClient) : ResourceBase
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
             ["outcomes"] = request.Outcomes?.Select(o => o.ToString()),
-            ["procedureIds"] = request.ProcedureIds,
-            ["procedureVersions"] = request.ProcedureVersions,
-            ["serialNumbers"] = request.SerialNumbers,
-            ["partNumbers"] = request.PartNumbers,
-            ["revisionNumbers"] = request.RevisionNumbers,
-            ["durationMin"] = request.DurationMin,
-            ["durationMax"] = request.DurationMax,
-            ["startedAfter"] = request.StartedAfter,
-            ["startedBefore"] = request.StartedBefore,
-            ["endedAfter"] = request.EndedAfter,
-            ["endedBefore"] = request.EndedBefore,
-            ["createdAfter"] = request.CreatedAfter,
-            ["createdBefore"] = request.CreatedBefore,
-            ["createdByUserIds"] = request.CreatedByUserIds,
-            ["createdByStationIds"] = request.CreatedByStationIds,
-            ["operatedByIds"] = request.OperatedByIds,
+            ["procedure_ids"] = request.ProcedureIds,
+            ["procedure_versions"] = request.ProcedureVersions,
+            ["serial_numbers"] = request.SerialNumbers,
+            ["part_numbers"] = request.PartNumbers,
+            ["revision_numbers"] = request.RevisionNumbers,
+            ["duration_min"] = request.DurationMin,
+            ["duration_max"] = request.DurationMax,
+            ["started_after"] = request.StartedAfter,
+            ["started_before"] = request.StartedBefore,
+            ["ended_after"] = request.EndedAfter,
+            ["ended_before"] = request.EndedBefore,
+            ["created_after"] = request.CreatedAfter,
+            ["created_before"] = request.CreatedBefore,
+            ["created_by_user_ids"] = request.CreatedByUserIds,
+            ["created_by_station_ids"] = request.CreatedByStationIds,
+            ["operated_by_ids"] = request.OperatedByIds,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),
-            ["sortBy"] = request.SortBy,
-            ["sortOrder"] = request.SortOrder,
+            ["sort_by"] = request.SortBy,
+            ["sort_order"] = request.SortOrder,
         };
 
         var uri = BuildUriWithArrayParams(BasePath, queryParams);

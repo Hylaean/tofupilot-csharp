@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace TofuPilot.Models.Common;
 
 /// <summary>
@@ -11,18 +9,36 @@ public record PaginatedResponse<T>
     /// <summary>
     /// Gets the items in the current page.
     /// </summary>
-    [JsonPropertyName("data")]
     public required IReadOnlyList<T> Data { get; init; }
+
+    /// <summary>
+    /// Gets the pagination metadata.
+    /// </summary>
+    public PaginationMeta? Meta { get; init; }
 
     /// <summary>
     /// Gets the cursor for the next page, if available.
     /// </summary>
-    [JsonPropertyName("nextCursor")]
-    public double? NextCursor { get; init; }
+    public double? NextCursor => Meta?.NextCursor;
 
     /// <summary>
     /// Gets whether there are more items available.
     /// </summary>
-    [JsonPropertyName("hasMore")]
+    public bool HasMore => Meta?.HasMore ?? false;
+}
+
+/// <summary>
+/// Pagination metadata from the API.
+/// </summary>
+public record PaginationMeta
+{
+    /// <summary>
+    /// Gets whether there are more items available.
+    /// </summary>
     public bool HasMore { get; init; }
+
+    /// <summary>
+    /// Gets the cursor for the next page.
+    /// </summary>
+    public double? NextCursor { get; init; }
 }

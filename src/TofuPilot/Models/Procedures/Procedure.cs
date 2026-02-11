@@ -10,43 +10,36 @@ public record Procedure
     /// <summary>
     /// Gets the unique identifier of the procedure.
     /// </summary>
-    [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     /// <summary>
     /// Gets the procedure name.
     /// </summary>
-    [JsonPropertyName("name")]
-    public required string Name { get; init; }
+    public string? Name { get; init; }
 
     /// <summary>
     /// Gets the procedure identifier (slug).
     /// </summary>
-    [JsonPropertyName("identifier")]
     public string? Identifier { get; init; }
 
     /// <summary>
     /// Gets the procedure description.
     /// </summary>
-    [JsonPropertyName("description")]
     public string? Description { get; init; }
 
     /// <summary>
     /// Gets when the procedure was created.
     /// </summary>
-    [JsonPropertyName("createdAt")]
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
     /// Gets the URL to view the procedure.
     /// </summary>
-    [JsonPropertyName("url")]
     public string? Url { get; init; }
 
     /// <summary>
     /// Gets the versions of this procedure.
     /// </summary>
-    [JsonPropertyName("versions")]
     public IReadOnlyList<ProcedureVersion>? Versions { get; init; }
 }
 
@@ -58,25 +51,21 @@ public record ProcedureVersion
     /// <summary>
     /// Gets the unique identifier of the version.
     /// </summary>
-    [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     /// <summary>
-    /// Gets the version string.
+    /// Gets the version tag string.
     /// </summary>
-    [JsonPropertyName("version")]
-    public required string Version { get; init; }
+    public string? Tag { get; init; }
 
     /// <summary>
     /// Gets the procedure ID this version belongs to.
     /// </summary>
-    [JsonPropertyName("procedureId")]
     public string? ProcedureId { get; init; }
 
     /// <summary>
     /// Gets when the version was created.
     /// </summary>
-    [JsonPropertyName("createdAt")]
     public DateTimeOffset CreatedAt { get; init; }
 }
 
@@ -88,13 +77,11 @@ public record CreateProcedureRequest
     /// <summary>
     /// Gets or sets the procedure name.
     /// </summary>
-    [JsonPropertyName("name")]
     public required string Name { get; init; }
 
     /// <summary>
     /// Gets or sets the procedure description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 }
@@ -107,14 +94,12 @@ public record UpdateProcedureRequest
     /// <summary>
     /// Gets or sets the procedure name.
     /// </summary>
-    [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Name { get; init; }
 
     /// <summary>
     /// Gets or sets the procedure description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 }
@@ -125,10 +110,9 @@ public record UpdateProcedureRequest
 public record CreateProcedureVersionRequest
 {
     /// <summary>
-    /// Gets or sets the version string.
+    /// Gets or sets the version tag string.
     /// </summary>
-    [JsonPropertyName("version")]
-    public required string Version { get; init; }
+    public required string Tag { get; init; }
 }
 
 /// <summary>

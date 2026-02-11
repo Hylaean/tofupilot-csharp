@@ -8,16 +8,14 @@ namespace TofuPilot.Models.Attachments;
 public record InitializeUploadResponse
 {
     /// <summary>
-    /// Gets the upload ID.
+    /// Gets the attachment ID.
     /// </summary>
-    [JsonPropertyName("uploadId")]
-    public required string UploadId { get; init; }
+    public string? Id { get; init; }
 
     /// <summary>
     /// Gets the presigned URL for uploading.
     /// </summary>
-    [JsonPropertyName("presignedUrl")]
-    public required string PresignedUrl { get; init; }
+    public string? UploadUrl { get; init; }
 }
 
 /// <summary>
@@ -28,20 +26,20 @@ public record InitializeUploadRequest
     /// <summary>
     /// Gets or sets the file name.
     /// </summary>
-    [JsonPropertyName("fileName")]
+    [JsonPropertyName("name")]
     public required string FileName { get; init; }
 
     /// <summary>
     /// Gets or sets the content type.
     /// </summary>
-    [JsonPropertyName("contentType")]
-    public required string ContentType { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string? ContentType { get; init; }
 
     /// <summary>
     /// Gets or sets the file size in bytes.
     /// </summary>
-    [JsonPropertyName("fileSize")]
-    public required long FileSize { get; init; }
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public long? FileSize { get; init; }
 }
 
 /// <summary>
@@ -52,6 +50,5 @@ public record DeleteAttachmentResponse
     /// <summary>
     /// Gets whether the deletion was successful.
     /// </summary>
-    [JsonPropertyName("success")]
     public bool Success { get; init; }
 }

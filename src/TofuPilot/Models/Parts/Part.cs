@@ -10,43 +10,37 @@ public record Part
     /// <summary>
     /// Gets the unique identifier of the part.
     /// </summary>
-    [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     /// <summary>
     /// Gets the part number.
     /// </summary>
-    [JsonPropertyName("partNumber")]
-    public required string PartNumber { get; init; }
+    [JsonPropertyName("number")]
+    public string? PartNumber { get; init; }
 
     /// <summary>
     /// Gets the part name.
     /// </summary>
-    [JsonPropertyName("name")]
     public string? Name { get; init; }
 
     /// <summary>
     /// Gets the part description.
     /// </summary>
-    [JsonPropertyName("description")]
     public string? Description { get; init; }
 
     /// <summary>
     /// Gets when the part was created.
     /// </summary>
-    [JsonPropertyName("createdAt")]
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
     /// Gets the URL to view the part.
     /// </summary>
-    [JsonPropertyName("url")]
     public string? Url { get; init; }
 
     /// <summary>
     /// Gets the revisions of this part.
     /// </summary>
-    [JsonPropertyName("revisions")]
     public IReadOnlyList<PartRevision>? Revisions { get; init; }
 }
 
@@ -58,25 +52,22 @@ public record PartRevision
     /// <summary>
     /// Gets the unique identifier of the revision.
     /// </summary>
-    [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     /// <summary>
     /// Gets the revision number.
     /// </summary>
-    [JsonPropertyName("revisionNumber")]
-    public required string RevisionNumber { get; init; }
+    [JsonPropertyName("number")]
+    public string? RevisionNumber { get; init; }
 
     /// <summary>
     /// Gets the part ID this revision belongs to.
     /// </summary>
-    [JsonPropertyName("partId")]
     public string? PartId { get; init; }
 
     /// <summary>
     /// Gets when the revision was created.
     /// </summary>
-    [JsonPropertyName("createdAt")]
     public DateTimeOffset CreatedAt { get; init; }
 }
 
@@ -88,20 +79,18 @@ public record CreatePartRequest
     /// <summary>
     /// Gets or sets the part number.
     /// </summary>
-    [JsonPropertyName("partNumber")]
+    [JsonPropertyName("number")]
     public required string PartNumber { get; init; }
 
     /// <summary>
     /// Gets or sets the part name.
     /// </summary>
-    [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Name { get; init; }
 
     /// <summary>
     /// Gets or sets the part description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 }
@@ -112,23 +101,21 @@ public record CreatePartRequest
 public record UpdatePartRequest
 {
     /// <summary>
-    /// Gets or sets the part number.
+    /// Gets or sets the new part number.
     /// </summary>
-    [JsonPropertyName("partNumber")]
+    [JsonPropertyName("new_number")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? PartNumber { get; init; }
 
     /// <summary>
     /// Gets or sets the part name.
     /// </summary>
-    [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Name { get; init; }
 
     /// <summary>
     /// Gets or sets the part description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 }
@@ -141,7 +128,7 @@ public record CreatePartRevisionRequest
     /// <summary>
     /// Gets or sets the revision number.
     /// </summary>
-    [JsonPropertyName("revisionNumber")]
+    [JsonPropertyName("number")]
     public required string RevisionNumber { get; init; }
 }
 
@@ -151,9 +138,9 @@ public record CreatePartRevisionRequest
 public record UpdatePartRevisionRequest
 {
     /// <summary>
-    /// Gets or sets the revision number.
+    /// Gets or sets the new revision number.
     /// </summary>
-    [JsonPropertyName("revisionNumber")]
+    [JsonPropertyName("number")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? RevisionNumber { get; init; }
 }

@@ -35,7 +35,7 @@ public class RunsResourceTests
                     SerialNumber = "SN001"
                 }
             },
-            HasMore = false
+            Meta = new PaginationMeta { HasMore = false }
         };
 
         _mockHttpClient
@@ -102,7 +102,7 @@ public class RunsResourceTests
 
         _mockHttpClient
             .Setup(x => x.GetAsync<Run>(
-                "/v2/runs/run-123",
+                "v2/runs/run-123",
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedRun);
 
@@ -119,7 +119,7 @@ public class RunsResourceTests
     public async Task DeleteAsync_DeletesRuns()
     {
         // Arrange
-        var expectedResponse = new DeleteResponse { Deleted = 2 };
+        var expectedResponse = new DeleteResponse { Id = "run-1" };
 
         _mockHttpClient
             .Setup(x => x.DeleteAsync<DeleteResponse>(
@@ -132,6 +132,6 @@ public class RunsResourceTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Deleted.Should().Be(2);
+        result.Id.Should().Be("run-1");
     }
 }

@@ -43,6 +43,8 @@ jobs:
 
       - name: Run tests
         run: dotnet test --configuration Release --no-build --verbosity normal
+        env:
+          TOFUPILOT_API_KEY: ${{ secrets.TOFUPILOT_API_KEY }}
 
   release:
     needs: build

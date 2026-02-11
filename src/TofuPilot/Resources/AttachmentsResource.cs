@@ -8,11 +8,11 @@ namespace TofuPilot.Resources;
 public sealed class AttachmentsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/attachments";
+    protected override string BasePath => "v2/attachments";
 
     /// <summary>Initializes an upload for an attachment.</summary>
     public Task<InitializeUploadResponse> InitializeAsync(InitializeUploadRequest request, CancellationToken cancellationToken = default) =>
-        HttpClient.PostAsync<InitializeUploadRequest, InitializeUploadResponse>($"{BasePath}/initialize", request, cancellationToken);
+        HttpClient.PostAsync<InitializeUploadRequest, InitializeUploadResponse>(BasePath, request, cancellationToken);
 
     /// <summary>Deletes an attachment.</summary>
     public Task<DeleteAttachmentResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>

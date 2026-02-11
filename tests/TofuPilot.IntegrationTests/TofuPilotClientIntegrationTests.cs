@@ -23,6 +23,7 @@ public class TofuPilotClientIntegrationTests : IDisposable
     public TofuPilotClientIntegrationTests()
     {
         var configuration = new ConfigurationBuilder()
+            .AddUserSecrets<TofuPilotClientIntegrationTests>()
             .AddEnvironmentVariables()
             .Build();
 
@@ -77,8 +78,8 @@ public class TofuPilotClientIntegrationTests : IDisposable
                 {
                     Name = "Test Phase",
                     Outcome = PhaseOutcome.PASS,
-                    StartTimeMillis = DateTimeOffset.UtcNow.AddMinutes(-1).ToUnixTimeMilliseconds(),
-                    EndTimeMillis = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                    StartedAt = DateTimeOffset.UtcNow.AddMinutes(-1),
+                    EndedAt = DateTimeOffset.UtcNow,
                     Measurements = new List<CreateRunMeasurement>
                     {
                         new()

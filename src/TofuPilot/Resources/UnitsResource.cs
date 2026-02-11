@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/units";
+    protected override string BasePath => "v2/units";
 
     /// <summary>
     /// Lists units with optional filtering.
@@ -22,10 +22,10 @@ public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBas
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
-            ["serialNumbers"] = request.SerialNumbers,
-            ["partNumbers"] = request.PartNumbers,
+            ["serial_numbers"] = request.SerialNumbers,
+            ["part_numbers"] = request.PartNumbers,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),
         };
@@ -53,20 +53,29 @@ public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBas
         HttpClient.PatchAsync<UpdateUnitRequest, Unit>($"{BasePath}/{id}", request, cancellationToken);
 
     /// <summary>
-    /// Deletes a unit by ID.
+    /// Deletes units by serial numbers.
     /// </summary>
-    public Task<DeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
+    public Task<DeleteResponse> DeleteAsync(IEnumerable<string> serialNumbers, CancellationToken cancellationToken = default)
+    {
+        var uri = BuildUriWithArrayParams(BasePath, new Dictionary<string, object?> { ["serial_numbers"] = serialNumbers });
+        return HttpClient.DeleteAsync<DeleteResponse>(uri, cancellationToken);
+    }
+
+    /// <summary>
+    /// Deletes a single unit by serial number.
+    /// </summary>
+    public Task<DeleteResponse> DeleteAsync(string serialNumber, CancellationToken cancellationToken = default) =>
+        DeleteAsync(new[] { serialNumber }, cancellationToken);
 
     /// <summary>
     /// Adds a child unit to a parent unit.
     /// </summary>
-    public Task<Unit> AddChildAsync(string parentId, string childId, CancellationToken cancellationToken = default) =>
-        HttpClient.PostAsync<object, Unit>($"{BasePath}/{parentId}/children/{childId}", new { }, cancellationToken);
+    public Task<Unit> AddChildAsync(string parentSerialNumber, string childSerialNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.PutAsync<AddChildRequest, Unit>($"{BasePath}/{parentSerialNumber}/children", new AddChildRequest { ChildSerialNumber = childSerialNumber }, cancellationToken);
 
     /// <summary>
     /// Removes a child unit from a parent unit.
     /// </summary>
-    public Task<Unit> RemoveChildAsync(string parentId, string childId, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<Unit>($"{BasePath}/{parentId}/children/{childId}", cancellationToken);
+    public Task<Unit> RemoveChildAsync(string parentSerialNumber, string childSerialNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<Unit>($"{BasePath}/{parentSerialNumber}/children?child_serial_number={Uri.EscapeDataString(childSerialNumber)}", cancellationToken);
 }

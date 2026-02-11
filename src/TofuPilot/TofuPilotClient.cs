@@ -60,7 +60,9 @@ public sealed class TofuPilotClient : IDisposable
     private static ITofuPilotHttpClient CreateHttpClient(string? apiKey, string? baseUrl, out HttpClient ownedClient)
     {
         var resolvedApiKey = apiKey ?? Environment.GetEnvironmentVariable("TOFUPILOT_API_KEY");
-        var resolvedBaseUrl = baseUrl ?? Environment.GetEnvironmentVariable("TOFUPILOT_URL") ?? "https://www.tofupilot.com";
+        var resolvedBaseUrl = baseUrl ?? Environment.GetEnvironmentVariable("TOFUPILOT_URL") ?? "https://www.tofupilot.app/api/";
+        if (!resolvedBaseUrl.EndsWith('/'))
+            resolvedBaseUrl += "/";
 
         ownedClient = new HttpClient
         {

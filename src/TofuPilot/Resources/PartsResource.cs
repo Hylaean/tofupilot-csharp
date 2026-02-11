@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/parts";
+    protected override string BasePath => "v2/parts";
 
     /// <summary>Gets the revisions sub-resource.</summary>
     public PartRevisionsResource Revisions { get; } = new(httpClient);
@@ -23,7 +23,7 @@ public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBas
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),
@@ -52,25 +52,25 @@ public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBas
 public sealed class PartRevisionsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/parts";
+    protected override string BasePath => "v2/parts";
 
     /// <summary>Lists revisions for a part.</summary>
-    public Task<PaginatedResponse<PartRevision>> ListAsync(string partId, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<PaginatedResponse<PartRevision>>($"{BasePath}/{partId}/revisions", cancellationToken);
+    public Task<PaginatedResponse<PartRevision>> ListAsync(string partNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<PaginatedResponse<PartRevision>>($"{BasePath}/{partNumber}/revisions", cancellationToken);
 
     /// <summary>Creates a new revision for a part.</summary>
-    public Task<PartRevision> CreateAsync(string partId, CreatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
-        HttpClient.PostAsync<CreatePartRevisionRequest, PartRevision>($"{BasePath}/{partId}/revisions", request, cancellationToken);
+    public Task<PartRevision> CreateAsync(string partNumber, CreatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreatePartRevisionRequest, PartRevision>($"{BasePath}/{partNumber}/revisions", request, cancellationToken);
 
-    /// <summary>Gets a part revision by ID.</summary>
-    public Task<PartRevision> GetAsync(string partId, string revisionId, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<PartRevision>($"{BasePath}/{partId}/revisions/{revisionId}", cancellationToken);
+    /// <summary>Gets a part revision by number.</summary>
+    public Task<PartRevision> GetAsync(string partNumber, string revisionNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<PartRevision>($"{BasePath}/{partNumber}/revisions/{revisionNumber}", cancellationToken);
 
     /// <summary>Updates a part revision.</summary>
-    public Task<PartRevision> UpdateAsync(string partId, string revisionId, UpdatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
-        HttpClient.PatchAsync<UpdatePartRevisionRequest, PartRevision>($"{BasePath}/{partId}/revisions/{revisionId}", request, cancellationToken);
+    public Task<PartRevision> UpdateAsync(string partNumber, string revisionNumber, UpdatePartRevisionRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdatePartRevisionRequest, PartRevision>($"{BasePath}/{partNumber}/revisions/{revisionNumber}", request, cancellationToken);
 
     /// <summary>Deletes a part revision.</summary>
-    public Task<DeleteResponse> DeleteAsync(string partId, string revisionId, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{partId}/revisions/{revisionId}", cancellationToken);
+    public Task<DeleteResponse> DeleteAsync(string partNumber, string revisionNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{partNumber}/revisions/{revisionNumber}", cancellationToken);
 }
