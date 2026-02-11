@@ -10,39 +10,30 @@ public record Station
     /// <summary>
     /// Gets the unique identifier of the station.
     /// </summary>
-    [JsonPropertyName("id")]
     public required string Id { get; init; }
 
     /// <summary>
     /// Gets the station name.
     /// </summary>
-    [JsonPropertyName("name")]
-    public required string Name { get; init; }
+    public string? Name { get; init; }
 
     /// <summary>
     /// Gets the station description.
     /// </summary>
-    [JsonPropertyName("description")]
     public string? Description { get; init; }
 
     /// <summary>
     /// Gets when the station was created.
     /// </summary>
-    [JsonPropertyName("createdAt")]
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
     /// Gets the URL to view the station.
     /// </summary>
-    [JsonPropertyName("url")]
     public string? Url { get; init; }
 
-    /// <summary>
-    /// Gets the linked procedure IDs.
-    /// </summary>
-    [JsonPropertyName("linkedProcedureIds")]
-    public IReadOnlyList<string>? LinkedProcedureIds { get; init; }
 }
+
 
 /// <summary>
 /// Request to create a station.
@@ -52,13 +43,11 @@ public record CreateStationRequest
     /// <summary>
     /// Gets or sets the station name.
     /// </summary>
-    [JsonPropertyName("name")]
     public required string Name { get; init; }
 
     /// <summary>
     /// Gets or sets the station description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
 }
@@ -71,28 +60,14 @@ public record UpdateStationRequest
     /// <summary>
     /// Gets or sets the station name.
     /// </summary>
-    [JsonPropertyName("name")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Name { get; init; }
 
     /// <summary>
     /// Gets or sets the station description.
     /// </summary>
-    [JsonPropertyName("description")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Description { get; init; }
-}
-
-/// <summary>
-/// Request to link a procedure to a station.
-/// </summary>
-public record LinkProcedureRequest
-{
-    /// <summary>
-    /// Gets or sets the procedure ID to link.
-    /// </summary>
-    [JsonPropertyName("procedureId")]
-    public required string ProcedureId { get; init; }
 }
 
 /// <summary>

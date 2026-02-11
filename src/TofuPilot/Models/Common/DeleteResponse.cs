@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace TofuPilot.Models.Common;
 
 /// <summary>
@@ -8,8 +6,12 @@ namespace TofuPilot.Models.Common;
 public record DeleteResponse
 {
     /// <summary>
-    /// Gets the number of items deleted.
+    /// Gets the ID of the deleted resource.
     /// </summary>
-    [JsonPropertyName("deleted")]
-    public int Deleted { get; init; }
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the IDs of deleted resources (for bulk delete).
+    /// </summary>
+    public IReadOnlyList<string>? Ids { get; init; }
 }

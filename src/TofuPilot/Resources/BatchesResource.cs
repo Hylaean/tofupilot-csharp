@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class BatchesResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/batches";
+    protected override string BasePath => "v2/batches";
 
     /// <summary>Lists batches with optional filtering.</summary>
     public async Task<PaginatedResponse<Batch>> ListAsync(
@@ -20,7 +20,7 @@ public sealed class BatchesResource(ITofuPilotHttpClient httpClient) : ResourceB
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),

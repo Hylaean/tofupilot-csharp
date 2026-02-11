@@ -12,9 +12,10 @@ public sealed class TofuPilotHttpClient(HttpClient httpClient, JsonSerializerOpt
     {
         var options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
+        options.Converters.Add(new UtcDateTimeOffsetConverter());
         options.TypeInfoResolverChain.Add(TofuPilotJsonContext.Default);
         return options;
     }
@@ -31,6 +32,15 @@ public sealed class TofuPilotHttpClient(HttpClient httpClient, JsonSerializerOpt
     {
         var content = JsonContent.Create(request, options: _jsonOptions);
         var response = await _httpClient.PostAsync(uri, content, cancellationToken).ConfigureAwait(false);
+        return await HandleResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    public async Task<TResponse> PutAsync<TRequest, TResponse>(string uri, TRequest request, CancellationToken cancellationToken = default)
+    {
+        var json = JsonSerializer.Serialize(request, _jsonOptions);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = await _httpClient.PutAsync(uri, content, cancellationToken).ConfigureAwait(false);
         return await HandleResponseAsync<TResponse>(response, cancellationToken).ConfigureAwait(false);
     }
 
@@ -104,17 +114,33 @@ public sealed class TofuPilotHttpClient(HttpClient httpClient, JsonSerializerOpt
             using var doc = JsonDocument.Parse(responseBody);
             var root = doc.RootElement;
 
+            // Try to get a detailed message including validation issues
+            string? baseMessage = null;
             if (root.TryGetProperty("message", out var message))
-                return message.GetString();
-
-            if (root.TryGetProperty("error", out var error))
+                baseMessage = message.GetString();
+            else if (root.TryGetProperty("error", out var error))
             {
-                return error.ValueKind == JsonValueKind.String
+                baseMessage = error.ValueKind == JsonValueKind.String
                     ? error.GetString()
                     : error.TryGetProperty("message", out var errorMessage)
                         ? errorMessage.GetString()
                         : null;
             }
+
+            // Append validation issues if present
+            if (baseMessage != null && root.TryGetProperty("issues", out var issues) && issues.ValueKind == JsonValueKind.Array)
+            {
+                var issueMessages = new List<string>();
+                foreach (var issue in issues.EnumerateArray())
+                {
+                    if (issue.TryGetProperty("message", out var issueMsg))
+                        issueMessages.Add(issueMsg.GetString() ?? "");
+                }
+                if (issueMessages.Count > 0)
+                    baseMessage += ": " + string.Join("; ", issueMessages);
+            }
+
+            return baseMessage;
         }
         catch (JsonException)
         {

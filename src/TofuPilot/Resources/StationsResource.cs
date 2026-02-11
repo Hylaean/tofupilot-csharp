@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class StationsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/stations";
+    protected override string BasePath => "v2/stations";
 
     /// <summary>Lists stations with optional filtering.</summary>
     public async Task<PaginatedResponse<Station>> ListAsync(
@@ -20,7 +20,7 @@ public sealed class StationsResource(ITofuPilotHttpClient httpClient) : Resource
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),
@@ -46,11 +46,4 @@ public sealed class StationsResource(ITofuPilotHttpClient httpClient) : Resource
     public Task<DeleteResponse> RemoveAsync(string id, CancellationToken cancellationToken = default) =>
         HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
 
-    /// <summary>Links a procedure to a station.</summary>
-    public Task<Station> LinkProcedureAsync(string stationId, string procedureId, CancellationToken cancellationToken = default) =>
-        HttpClient.PostAsync<LinkProcedureRequest, Station>($"{BasePath}/{stationId}/procedures", new() { ProcedureId = procedureId }, cancellationToken);
-
-    /// <summary>Unlinks a procedure from a station.</summary>
-    public Task<Station> UnlinkProcedureAsync(string stationId, string procedureId, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<Station>($"{BasePath}/{stationId}/procedures/{procedureId}", cancellationToken);
 }

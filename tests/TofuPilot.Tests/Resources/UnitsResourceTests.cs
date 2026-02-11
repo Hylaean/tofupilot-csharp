@@ -26,7 +26,8 @@ public class UnitsResourceTests
         var request = new CreateUnitRequest
         {
             SerialNumber = "SN001",
-            PartNumber = "PN001"
+            PartNumber = "PN001",
+            RevisionNumber = "R1"
         };
 
         var expectedUnit = new Unit
@@ -62,12 +63,12 @@ public class UnitsResourceTests
             {
                 new() { Id = "unit-1", SerialNumber = "SN001" }
             },
-            HasMore = false
+            Meta = new PaginationMeta { HasMore = false }
         };
 
         _mockHttpClient
             .Setup(x => x.GetAsync<PaginatedResponse<Unit>>(
-                It.Is<string>(s => s.Contains("serialNumbers")),
+                It.Is<string>(s => s.Contains("serial_numbers")),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedUnits);
 

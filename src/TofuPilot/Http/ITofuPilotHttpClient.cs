@@ -37,6 +37,17 @@ public interface ITofuPilotHttpClient
     Task<TResponse> PatchAsync<TRequest, TResponse>(string uri, TRequest request, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Sends a PUT request to the specified URI.
+    /// </summary>
+    /// <typeparam name="TRequest">The type of the request.</typeparam>
+    /// <typeparam name="TResponse">The type of the response.</typeparam>
+    /// <param name="uri">The URI to send the request to.</param>
+    /// <param name="request">The request body.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The deserialized response.</returns>
+    Task<TResponse> PutAsync<TRequest, TResponse>(string uri, TRequest request, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Sends a DELETE request to the specified URI.
     /// </summary>
     /// <typeparam name="TResponse">The type of the response.</typeparam>

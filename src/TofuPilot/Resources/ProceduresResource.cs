@@ -9,7 +9,7 @@ namespace TofuPilot.Resources;
 public sealed class ProceduresResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/procedures";
+    protected override string BasePath => "v2/procedures";
 
     /// <summary>Gets the versions sub-resource.</summary>
     public ProcedureVersionsResource Versions { get; } = new(httpClient);
@@ -23,7 +23,7 @@ public sealed class ProceduresResource(ITofuPilotHttpClient httpClient) : Resour
 
         var queryParams = new Dictionary<string, object?>
         {
-            ["searchQuery"] = request.SearchQuery,
+            ["search_query"] = request.SearchQuery,
             ["ids"] = request.Ids,
             ["limit"] = request.Limit?.ToString(),
             ["cursor"] = request.Cursor?.ToString(),
@@ -56,7 +56,7 @@ public sealed class ProceduresResource(ITofuPilotHttpClient httpClient) : Resour
 public sealed class ProcedureVersionsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
 {
     /// <inheritdoc/>
-    protected override string BasePath => "/v2/procedures";
+    protected override string BasePath => "v2/procedures";
 
     /// <summary>Lists versions for a procedure.</summary>
     public Task<PaginatedResponse<ProcedureVersion>> ListAsync(string procedureId, CancellationToken cancellationToken = default) =>
@@ -66,11 +66,11 @@ public sealed class ProcedureVersionsResource(ITofuPilotHttpClient httpClient) :
     public Task<ProcedureVersion> CreateAsync(string procedureId, CreateProcedureVersionRequest request, CancellationToken cancellationToken = default) =>
         HttpClient.PostAsync<CreateProcedureVersionRequest, ProcedureVersion>($"{BasePath}/{procedureId}/versions", request, cancellationToken);
 
-    /// <summary>Gets a procedure version by ID.</summary>
-    public Task<ProcedureVersion> GetAsync(string procedureId, string versionId, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<ProcedureVersion>($"{BasePath}/{procedureId}/versions/{versionId}", cancellationToken);
+    /// <summary>Gets a procedure version by tag.</summary>
+    public Task<ProcedureVersion> GetAsync(string procedureId, string tag, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<ProcedureVersion>($"{BasePath}/{procedureId}/versions/{tag}", cancellationToken);
 
-    /// <summary>Deletes a procedure version.</summary>
-    public Task<DeleteResponse> DeleteAsync(string procedureId, string versionId, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{procedureId}/versions/{versionId}", cancellationToken);
+    /// <summary>Deletes a procedure version by tag.</summary>
+    public Task<DeleteResponse> DeleteAsync(string procedureId, string tag, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{procedureId}/versions/{tag}", cancellationToken);
 }
