@@ -33,4 +33,63 @@ public class ServiceCollectionExtensionsTests
         client.Stations.Should().NotBeNull();
         client.Attachments.Should().NotBeNull();
     }
+
+    [Fact]
+    public void AddTofuPilot_CanBeInjectedIntoTransientService()
+    {
+        var services = new ServiceCollection();
+        services.AddTofuPilot(options => { options.ApiKey = "test-key"; });
+        services.AddTransient<TransientConsumer>();
+
+        using var provider = services.BuildServiceProvider();
+        using var scope = provider.CreateScope();
+
+        var consumer = scope.ServiceProvider.GetRequiredService<TransientConsumer>();
+
+        consumer.Client.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddTofuPilot_CanBeInjectedIntoScopedService()
+    {
+        var services = new ServiceCollection();
+        services.AddTofuPilot(options => { options.ApiKey = "test-key"; });
+        services.AddScoped<ScopedConsumer>();
+
+        using var provider = services.BuildServiceProvider();
+        using var scope = provider.CreateScope();
+
+        var consumer = scope.ServiceProvider.GetRequiredService<ScopedConsumer>();
+
+        consumer.Client.Should().NotBeNull();
+    }
+
+    [Fact]
+    public void AddTofuPilot_CanBeInjectedIntoSingletonService()
+    {
+        var services = new ServiceCollection();
+        services.AddTofuPilot(options => { options.ApiKey = "test-key"; });
+        services.AddSingleton<SingletonConsumer>();
+
+        using var provider = services.BuildServiceProvider();
+
+        var consumer = provider.GetRequiredService<SingletonConsumer>();
+
+        consumer.Client.Should().NotBeNull();
+    }
+
+    private class TransientConsumer(TofuPilotClient client)
+    {
+        public TofuPilotClient Client => client;
+    }
+
+    private class ScopedConsumer(TofuPilotClient client)
+    {
+        public TofuPilotClient Client => client;
+    }
+
+    private class SingletonConsumer(TofuPilotClient client)
+    {
+        public TofuPilotClient Client => client;
+    }
 }

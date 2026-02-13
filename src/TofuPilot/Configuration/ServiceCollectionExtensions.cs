@@ -49,7 +49,7 @@ public static class ServiceCollectionExtensions
         .AddHttpMessageHandler<RetryHandler>();
 
         // Register client with explicit constructor to avoid ambiguity
-        services.AddScoped<TofuPilotClient>(sp =>
+        services.AddTransient<TofuPilotClient>(sp =>
             new TofuPilotClient(sp.GetRequiredService<ITofuPilotHttpClient>()));
 
         return services;
