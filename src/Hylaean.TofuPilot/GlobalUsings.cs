@@ -1,0 +1,14 @@
+global using System.Net;
+global using System.Net.Http.Headers;
+global using System.Net.Http.Json;
+global using System.Text;
+global using System.Text.Json;
+global using System.Text.Json.Serialization;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Options;
+global using Hylaean.TofuPilot.Abstractions.Configuration;
+global using Hylaean.TofuPilot.Abstractions.Exceptions;
+global using Hylaean.TofuPilot.Abstractions.Models;
+global using Hylaean.TofuPilot.Configuration;
+global using Hylaean.TofuPilot.Http;
+global using Hylaean.TofuPilot.Serialization;

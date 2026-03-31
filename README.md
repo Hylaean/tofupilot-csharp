@@ -1,6 +1,6 @@
 # TofuPilot C# SDK
 
-[![NuGet](https://img.shields.io/nuget/v/Hylaean.Tofupilot.svg)](https://www.nuget.org/packages/Hylaean.Tofupilot)
+[![NuGet](https://img.shields.io/nuget/v/Hylaean.TofuPilot.svg)](https://www.nuget.org/packages/Hylaean.TofuPilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
 
@@ -37,7 +37,7 @@ Install-Package Hylaean.TofuPilot
 ## Quick Start
 
 ```csharp
-using Hylaean.Tofupilot;
+using Hylaean.TofuPilot;
 
 // Create a client with your API key
 using var client = new TofuPilotClient(apiKey: "your-api-key");
@@ -65,7 +65,7 @@ The V2 API provides a clean, resource-based interface for all TofuPilot operatio
 ### Configuration
 
 ```csharp
-using Hylaean.Tofupilot;
+using Hylaean.TofuPilot;
 
 // Basic usage
 using var client = new TofuPilotClient(apiKey: "your-api-key");

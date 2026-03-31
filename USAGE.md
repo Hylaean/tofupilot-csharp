@@ -1,4 +1,4 @@
-# Hylaean.Tofupilot — API Reference
+# Hylaean.TofuPilot — API Reference
 
 Unofficial C# SDK for the [TofuPilot](https://tofupilot.com) hardware testing platform (V2 API).
 
@@ -31,7 +31,7 @@ Unofficial C# SDK for the [TofuPilot](https://tofupilot.com) hardware testing pl
 ## Installation
 
 ```bash
-dotnet add package Hylaean.Tofupilot
+dotnet add package Hylaean.TofuPilot
 ```
 
 ## Authentication
@@ -49,7 +49,7 @@ using var client = new TofuPilotClient();
 ## Client Setup
 
 ```csharp
-using Hylaean.Tofupilot;
+using Hylaean.TofuPilot;
 
 // Defaults: API key from env, base URL https://www.tofupilot.app/api/
 using var client = new TofuPilotClient();
@@ -66,7 +66,7 @@ The base URL can also be set via the `TOFUPILOT_URL` environment variable.
 ## Dependency Injection
 
 ```csharp
-using Hylaean.Tofupilot.Configuration;
+using Hylaean.TofuPilot.Configuration;
 
 // Option 1: Configure with action
 services.AddTofuPilot(options =>

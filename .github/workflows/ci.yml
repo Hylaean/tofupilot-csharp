@@ -53,7 +53,7 @@ jobs:
       - name: Cleanup test entities
         if: always() && env.TOFUPILOT_API_KEY != ''
         continue-on-error: true
-        run: dotnet run --project tools/Hylaean.Tofupilot.Cleanup/Hylaean.Tofupilot.Cleanup.csproj
+        run: dotnet run --project tools/Hylaean.TofuPilot.Cleanup/Hylaean.TofuPilot.Cleanup.csproj
         env:
           TOFUPILOT_API_KEY: ${{ secrets.TOFUPILOT_API_KEY }}
 

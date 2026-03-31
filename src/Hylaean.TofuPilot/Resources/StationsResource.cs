@@ -1,0 +1,52 @@
+using Hylaean.TofuPilot.Models.Common;
+using Hylaean.TofuPilot.Models.Stations;
+
+namespace Hylaean.TofuPilot.Resources;
+
+/// <summary>
+/// Resource for managing stations.
+/// </summary>
+public sealed class StationsResource(ITofuPilotHttpClient httpClient) : ResourceBase(httpClient)
+{
+    /// <inheritdoc/>
+    protected override string BasePath => "v2/stations";
+
+    /// <summary>Lists stations with optional filtering.</summary>
+    public async Task<PaginatedResponse<Station>> ListAsync(
+        ListStationsRequest? request = null,
+        CancellationToken cancellationToken = default)
+    {
+        request ??= new ListStationsRequest();
+
+        var queryParams = new Dictionary<string, object?>
+        {
+            ["search_query"] = request.SearchQuery,
+            ["ids"] = request.Ids,
+            ["limit"] = request.Limit?.ToString(),
+            ["cursor"] = request.Cursor?.ToString(),
+        };
+
+        var uri = BuildUriWithArrayParams(BasePath, queryParams);
+        return await HttpClient.GetAsync<PaginatedResponse<Station>>(uri, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>Creates a new station.</summary>
+    public Task<Station> CreateAsync(CreateStationRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<CreateStationRequest, Station>(BasePath, request, cancellationToken);
+
+    /// <summary>Gets a station by ID.</summary>
+    public Task<Station> GetAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Station>($"{BasePath}/{id}", cancellationToken);
+
+    /// <summary>Updates a station.</summary>
+    public Task<Station> UpdateAsync(string id, UpdateStationRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdateStationRequest, Station>($"{BasePath}/{id}", request, cancellationToken);
+
+    /// <summary>Gets the current station (identified by the API key).</summary>
+    public Task<Station> GetCurrentAsync(CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Station>($"{BasePath}/current", cancellationToken);
+
+    /// <summary>Removes (deletes) a station by ID.</summary>
+    public Task<DeleteResponse> RemoveAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
+}

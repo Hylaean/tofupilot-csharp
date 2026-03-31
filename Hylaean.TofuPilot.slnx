@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="src/Hylaean.TofuPilot.Abstractions/Hylaean.TofuPilot.Abstractions.csproj" />
+  <Project Path="src/Hylaean.TofuPilot/Hylaean.TofuPilot.csproj" />
+  <Project Path="tests/Hylaean.TofuPilot.Tests/Hylaean.TofuPilot.Tests.csproj" />
+  <Project Path="tests/Hylaean.TofuPilot.IntegrationTests/Hylaean.TofuPilot.IntegrationTests.csproj" />
+  <Project Path="tools/Hylaean.TofuPilot.Cleanup/Hylaean.TofuPilot.Cleanup.csproj" />
+</Solution>
