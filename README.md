@@ -65,7 +65,7 @@ The V2 API provides a clean, resource-based interface for all TofuPilot operatio
 ### Configuration
 
 ```csharp
-using TofuPilot;
+using Hylaean.TofuPilot;
 
 // Basic usage
 using var client = new TofuPilotClient(apiKey: "your-api-key");
