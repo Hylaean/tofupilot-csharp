@@ -37,7 +37,7 @@ Install-Package Hylaean.TofuPilot
 ## Quick Start
 
 ```csharp
-using TofuPilot;
+using Hylaean.Tofupilot;
 
 // Create a client with your API key
 using var client = new TofuPilotClient(apiKey: "your-api-key");
@@ -65,7 +65,7 @@ The V2 API provides a clean, resource-based interface for all TofuPilot operatio
 ### Configuration
 
 ```csharp
-using Hylaean.TofuPilot;
+using Hylaean.Tofupilot;
 
 // Basic usage
 using var client = new TofuPilotClient(apiKey: "your-api-key");
