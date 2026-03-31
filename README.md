@@ -154,6 +154,26 @@ var version = await client.Procedures.Versions.CreateAsync(
 );
 ```
 
+### Attachments
+
+```csharp
+// Upload a file in one line (initialize + S3 PUT + finalize)
+var attachmentId = await client.Attachments.UploadAsync("report.pdf");
+
+// Or upload from a stream
+using var stream = File.OpenRead("data.csv");
+var id = await client.Attachments.UploadAsync(stream, "data.csv");
+
+// Attach to a run
+await client.Runs.UpdateAsync(runId, new UpdateRunRequest
+{
+    Attachments = [attachmentId]
+});
+
+// Download from a signed URL
+await AttachmentsResource.DownloadAsync(downloadUrl, "local-report.pdf");
+```
+
 ## Dependency Injection
 
 The SDK supports ASP.NET Core dependency injection:
