@@ -6,6 +6,8 @@
 
 The unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickly and seamlessly integrate all your hardware test runs into one app with just a few lines of C#.
 
+<sub>Looking for the official client? See [tofupilot/csharp-client](https://github.com/tofupilot/csharp-client).</sub>
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -262,6 +264,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [TofuPilot Website](https://tofupilot.com)
 - [TofuPilot Documentation](https://tofupilot.com/docs)
 - [API Reference (V2)](https://tofupilot.com/docs/api/v2)
+- [Official C# Client](https://github.com/tofupilot/csharp-client)
 - [Python SDK](https://github.com/tofupilot/tofupilot)
 - [Examples](https://github.com/tofupilot/examples)
 
