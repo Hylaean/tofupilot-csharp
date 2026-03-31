@@ -25,13 +25,13 @@ Unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickly an
 Install via NuGet Package Manager:
 
 ```bash
-dotnet add package TofuPilot
+dotnet add package Hylaean.TofuPilot
 ```
 
 Or via Package Manager Console:
 
 ```powershell
-Install-Package TofuPilot
+Install-Package Hylaean.TofuPilot
 ```
 
 ## Quick Start
