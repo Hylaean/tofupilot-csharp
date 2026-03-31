@@ -1,6 +1,6 @@
 # TofuPilot C# SDK
 
-[![NuGet](https://img.shields.io/nuget/v/TofuPilot.svg)](https://www.nuget.org/packages/TofuPilot)
+[![NuGet](https://img.shields.io/nuget/v/Hylaean.Tofupilot.svg)](https://www.nuget.org/packages/Hylaean.Tofupilot)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
 
