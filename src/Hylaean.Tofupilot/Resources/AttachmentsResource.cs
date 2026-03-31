@@ -1,4 +1,5 @@
 using Hylaean.Tofupilot.Models.Attachments;
+using Hylaean.Tofupilot.Models.Common;
 
 namespace Hylaean.Tofupilot.Resources;
 
@@ -14,7 +15,18 @@ public sealed class AttachmentsResource(ITofuPilotHttpClient httpClient) : Resou
     public Task<InitializeUploadResponse> InitializeAsync(InitializeUploadRequest request, CancellationToken cancellationToken = default) =>
         HttpClient.PostAsync<InitializeUploadRequest, InitializeUploadResponse>(BasePath, request, cancellationToken);
 
-    /// <summary>Deletes an attachment.</summary>
-    public Task<DeleteAttachmentResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteAttachmentResponse>($"{BasePath}/{id}", cancellationToken);
+    /// <summary>Finalizes an attachment upload.</summary>
+    public Task<FinalizeUploadResponse> FinalizeAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.PostAsync<object, FinalizeUploadResponse>($"{BasePath}/{id}/finalize", new { }, cancellationToken);
+
+    /// <summary>Deletes attachments by IDs.</summary>
+    public Task<BulkDeleteResponse> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+    {
+        var uri = BuildUriWithArrayParams(BasePath, new Dictionary<string, object?> { ["ids"] = ids });
+        return HttpClient.DeleteAsync<BulkDeleteResponse>(uri, cancellationToken);
+    }
+
+    /// <summary>Deletes a single attachment by ID.</summary>
+    public Task<BulkDeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
+        DeleteAsync(new[] { id }, cancellationToken);
 }

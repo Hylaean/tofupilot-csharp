@@ -92,12 +92,15 @@ services.AddTofuPilot(options => {
 | Runs | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
 | Units | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync, AddChildAsync, RemoveChildAsync |
 | Procedures | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| Procedures.Versions | ListAsync, CreateAsync, GetAsync, DeleteAsync |
-| Parts | ListAsync, CreateAsync, GetAsync, UpdateAsync |
-| Parts.Revisions | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
+| Procedures.Versions | CreateAsync, GetAsync, DeleteAsync |
+| Parts | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
+| Parts.Revisions | CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
 | Batches | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| Stations | ListAsync, CreateAsync, GetAsync, UpdateAsync, RemoveAsync, LinkProcedureAsync, UnlinkProcedureAsync |
-| Attachments | InitializeAsync, DeleteAsync |
+| Stations | ListAsync, CreateAsync, GetCurrentAsync, GetAsync, UpdateAsync, RemoveAsync |
+| Attachments | InitializeAsync, FinalizeAsync, DeleteAsync |
+| Users | ListAsync |
+
+> Full operation-by-operation mapping is maintained in [`API_COVERAGE.md`](API_COVERAGE.md).
 
 ## Conventions
 

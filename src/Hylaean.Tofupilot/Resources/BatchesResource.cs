@@ -43,6 +43,6 @@ public sealed class BatchesResource(ITofuPilotHttpClient httpClient) : ResourceB
         HttpClient.PatchAsync<UpdateBatchRequest, Batch>($"{BasePath}/{id}", request, cancellationToken);
 
     /// <summary>Deletes a batch by ID.</summary>
-    public Task<DeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
+    public Task<BulkDeleteResponse> DeleteAsync(string id, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<BulkDeleteResponse>($"{BasePath}/{id}", cancellationToken);
 }

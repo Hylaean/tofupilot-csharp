@@ -31,19 +31,23 @@ public sealed class TofuPilotClient : IDisposable
     /// <summary>Gets the attachments resource.</summary>
     public AttachmentsResource Attachments { get; }
 
+    /// <summary>Gets the users resource.</summary>
+    public UsersResource Users { get; }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="TofuPilotClient"/> class.
     /// </summary>
     /// <param name="httpClient">The HTTP client to use.</param>
     public TofuPilotClient(ITofuPilotHttpClient httpClient) =>
-        (Runs, Units, Procedures, Parts, Batches, Stations, Attachments) = (
+        (Runs, Units, Procedures, Parts, Batches, Stations, Attachments, Users) = (
             new RunsResource(httpClient),
             new UnitsResource(httpClient),
             new ProceduresResource(httpClient),
             new PartsResource(httpClient),
             new BatchesResource(httpClient),
             new StationsResource(httpClient),
-            new AttachmentsResource(httpClient)
+            new AttachmentsResource(httpClient),
+            new UsersResource(httpClient)
         );
 
     /// <summary>

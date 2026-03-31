@@ -72,9 +72,9 @@ public sealed class RunsResource(ITofuPilotHttpClient httpClient) : ResourceBase
     /// <summary>
     /// Deletes runs by IDs.
     /// </summary>
-    public Task<DeleteResponse> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
+    public Task<BulkDeleteResponse> DeleteAsync(IEnumerable<string> ids, CancellationToken cancellationToken = default)
     {
         var uri = BuildUriWithArrayParams(BasePath, new Dictionary<string, object?> { ["ids"] = ids });
-        return HttpClient.DeleteAsync<DeleteResponse>(uri, cancellationToken);
+        return HttpClient.DeleteAsync<BulkDeleteResponse>(uri, cancellationToken);
     }
 }

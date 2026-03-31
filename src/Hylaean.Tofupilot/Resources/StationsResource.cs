@@ -42,8 +42,11 @@ public sealed class StationsResource(ITofuPilotHttpClient httpClient) : Resource
     public Task<Station> UpdateAsync(string id, UpdateStationRequest request, CancellationToken cancellationToken = default) =>
         HttpClient.PatchAsync<UpdateStationRequest, Station>($"{BasePath}/{id}", request, cancellationToken);
 
+    /// <summary>Gets the current station (identified by the API key).</summary>
+    public Task<Station> GetCurrentAsync(CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Station>($"{BasePath}/current", cancellationToken);
+
     /// <summary>Removes (deletes) a station by ID.</summary>
     public Task<DeleteResponse> RemoveAsync(string id, CancellationToken cancellationToken = default) =>
         HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{id}", cancellationToken);
-
 }

@@ -55,16 +55,16 @@ public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBas
     /// <summary>
     /// Deletes units by serial numbers.
     /// </summary>
-    public Task<DeleteResponse> DeleteAsync(IEnumerable<string> serialNumbers, CancellationToken cancellationToken = default)
+    public Task<BulkDeleteResponse> DeleteAsync(IEnumerable<string> serialNumbers, CancellationToken cancellationToken = default)
     {
         var uri = BuildUriWithArrayParams(BasePath, new Dictionary<string, object?> { ["serial_numbers"] = serialNumbers });
-        return HttpClient.DeleteAsync<DeleteResponse>(uri, cancellationToken);
+        return HttpClient.DeleteAsync<BulkDeleteResponse>(uri, cancellationToken);
     }
 
     /// <summary>
     /// Deletes a single unit by serial number.
     /// </summary>
-    public Task<DeleteResponse> DeleteAsync(string serialNumber, CancellationToken cancellationToken = default) =>
+    public Task<BulkDeleteResponse> DeleteAsync(string serialNumber, CancellationToken cancellationToken = default) =>
         DeleteAsync(new[] { serialNumber }, cancellationToken);
 
     /// <summary>

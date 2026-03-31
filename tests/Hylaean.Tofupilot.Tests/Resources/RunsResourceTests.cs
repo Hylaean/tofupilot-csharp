@@ -119,10 +119,10 @@ public class RunsResourceTests
     public async Task DeleteAsync_DeletesRuns()
     {
         // Arrange
-        var expectedResponse = new DeleteResponse { Id = "run-1" };
+        var expectedResponse = new BulkDeleteResponse { Id = new[] { "run-1", "run-2" } };
 
         _mockHttpClient
-            .Setup(x => x.DeleteAsync<DeleteResponse>(
+            .Setup(x => x.DeleteAsync<BulkDeleteResponse>(
                 It.IsAny<string>(),
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
@@ -132,6 +132,6 @@ public class RunsResourceTests
 
         // Assert
         result.Should().NotBeNull();
-        result.Id.Should().Be("run-1");
+        result.Id.Should().Contain("run-1");
     }
 }

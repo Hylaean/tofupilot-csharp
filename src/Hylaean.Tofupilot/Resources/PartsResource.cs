@@ -46,8 +46,8 @@ public sealed class PartsResource(ITofuPilotHttpClient httpClient) : ResourceBas
         HttpClient.PatchAsync<UpdatePartRequest, Part>($"{BasePath}/{id}", request, cancellationToken);
 
     /// <summary>Deletes a part by part number.</summary>
-    public Task<DeleteResponse> DeleteAsync(string partNumber, CancellationToken cancellationToken = default) =>
-        HttpClient.DeleteAsync<DeleteResponse>($"{BasePath}/{partNumber}", cancellationToken);
+    public Task<DeletePartResponse> DeleteAsync(string partNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.DeleteAsync<DeletePartResponse>($"{BasePath}/{partNumber}", cancellationToken);
 }
 
 /// <summary>
@@ -57,10 +57,6 @@ public sealed class PartRevisionsResource(ITofuPilotHttpClient httpClient) : Res
 {
     /// <inheritdoc/>
     protected override string BasePath => "v2/parts";
-
-    /// <summary>Lists revisions for a part.</summary>
-    public Task<PaginatedResponse<PartRevision>> ListAsync(string partNumber, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<PaginatedResponse<PartRevision>>($"{BasePath}/{partNumber}/revisions", cancellationToken);
 
     /// <summary>Creates a new revision for a part.</summary>
     public Task<PartRevision> CreateAsync(string partNumber, CreatePartRevisionRequest request, CancellationToken cancellationToken = default) =>

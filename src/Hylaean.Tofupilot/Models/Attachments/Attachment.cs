@@ -43,6 +43,17 @@ public record InitializeUploadRequest
 }
 
 /// <summary>
+/// Response for finalizing an attachment upload.
+/// </summary>
+public record FinalizeUploadResponse
+{
+    /// <summary>
+    /// Gets the signed URL for accessing the uploaded file.
+    /// </summary>
+    public required string Url { get; init; }
+}
+
+/// <summary>
 /// Response for deleting an attachment.
 /// </summary>
 public record DeleteAttachmentResponse

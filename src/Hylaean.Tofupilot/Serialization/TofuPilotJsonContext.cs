@@ -8,6 +8,7 @@ using Hylaean.Tofupilot.Models.Procedures;
 using Hylaean.Tofupilot.Models.Runs;
 using Hylaean.Tofupilot.Models.Stations;
 using Hylaean.Tofupilot.Models.Units;
+using Hylaean.Tofupilot.Models.Users;
 
 namespace Hylaean.Tofupilot.Serialization;
 
@@ -52,9 +53,13 @@ namespace Hylaean.Tofupilot.Serialization;
 [JsonSerializable(typeof(PaginatedResponse<Station>))]
 [JsonSerializable(typeof(InitializeUploadRequest))]
 [JsonSerializable(typeof(InitializeUploadResponse))]
-[JsonSerializable(typeof(DeleteAttachmentResponse))]
+[JsonSerializable(typeof(FinalizeUploadResponse))]
+[JsonSerializable(typeof(User))]
+[JsonSerializable(typeof(List<User>))]
 [JsonSerializable(typeof(AddChildRequest))]
 [JsonSerializable(typeof(DeleteResponse))]
+[JsonSerializable(typeof(BulkDeleteResponse))]
+[JsonSerializable(typeof(DeletePartResponse))]
 [JsonSerializable(typeof(PaginationMeta))]
 public partial class TofuPilotJsonContext : JsonSerializerContext
 {

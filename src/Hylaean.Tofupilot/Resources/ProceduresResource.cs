@@ -58,10 +58,6 @@ public sealed class ProcedureVersionsResource(ITofuPilotHttpClient httpClient) :
     /// <inheritdoc/>
     protected override string BasePath => "v2/procedures";
 
-    /// <summary>Lists versions for a procedure.</summary>
-    public Task<PaginatedResponse<ProcedureVersion>> ListAsync(string procedureId, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<PaginatedResponse<ProcedureVersion>>($"{BasePath}/{procedureId}/versions", cancellationToken);
-
     /// <summary>Creates a new version for a procedure.</summary>
     public Task<ProcedureVersion> CreateAsync(string procedureId, CreateProcedureVersionRequest request, CancellationToken cancellationToken = default) =>
         HttpClient.PostAsync<CreateProcedureVersionRequest, ProcedureVersion>($"{BasePath}/{procedureId}/versions", request, cancellationToken);

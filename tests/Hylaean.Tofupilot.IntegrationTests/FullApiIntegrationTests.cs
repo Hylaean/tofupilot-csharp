@@ -9,6 +9,7 @@ using Hylaean.Tofupilot.Models.Procedures;
 using Hylaean.Tofupilot.Models.Runs;
 using Hylaean.Tofupilot.Models.Stations;
 using Hylaean.Tofupilot.Models.Units;
+using Hylaean.Tofupilot.Models.Users;
 using Xunit;
 
 namespace Hylaean.Tofupilot.IntegrationTests;
@@ -462,6 +463,28 @@ public class FullApiIntegrationTests : IDisposable
         upload.Should().NotBeNull();
         upload.Id.Should().NotBeNullOrEmpty();
         upload.UploadUrl.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task Users_List()
+    {
+        if (!_canRunTests) return;
+
+        var users = await _client!.Users.ListAsync();
+        users.Should().NotBeNull();
+        users.Should().NotBeEmpty();
+        users[0].Id.Should().NotBeNullOrEmpty();
+        users[0].Email.Should().NotBeNullOrEmpty();
+    }
+
+    [Fact]
+    public async Task Users_ListCurrent()
+    {
+        if (!_canRunTests) return;
+
+        var users = await _client!.Users.ListAsync(new ListUsersRequest { Current = true });
+        users.Should().NotBeNull();
+        users.Should().ContainSingle();
     }
 
     [Fact]
