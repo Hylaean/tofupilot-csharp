@@ -4,48 +4,30 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue.svg)](https://dotnet.microsoft.com/)
 
-Unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Quickly and seamlessly integrate all your hardware test runs into one app with just a few lines of C#.
+Unofficial open-source C# SDK for [TofuPilot](https://tofupilot.com). Integrate all your hardware test runs into one app with just a few lines of C#.
 
 <sub>Looking for the official client? See [tofupilot/csharp-client](https://github.com/tofupilot/csharp-client).</sub>
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [V2 API (Modern)](#v2-api-modern)
-- [Dependency Injection](#dependency-injection)
-- [Available Resources](#available-resources)
-- [Error Handling](#error-handling)
-- [Contributing](#contributing)
-- [License](#license)
-- [Links](#links)
-
 ## Installation
-
-Install via NuGet Package Manager:
 
 ```bash
 dotnet add package Hylaean.TofuPilot
-```
-
-Or via Package Manager Console:
-
-```powershell
-Install-Package Hylaean.TofuPilot
 ```
 
 ## Quick Start
 
 ```csharp
 using Hylaean.TofuPilot;
+using Hylaean.TofuPilot.Models.Runs;
+using Hylaean.TofuPilot.Abstractions.Models;
 
-// Create a client with your API key
+// Create a client (reads TOFUPILOT_API_KEY from environment by default)
 using var client = new TofuPilotClient(apiKey: "your-api-key");
 
 // List recent runs
 var runs = await client.Runs.ListAsync(new ListRunsRequest { Limit = 10 });
 
-// Create a new test run
+// Create a test run
 var run = await client.Runs.CreateAsync(new CreateRunRequest
 {
     ProcedureId = "your-procedure-id",
@@ -58,128 +40,9 @@ var run = await client.Runs.CreateAsync(new CreateRunRequest
 Console.WriteLine($"Created run: {run.Id}");
 ```
 
-## V2 API (Modern)
-
-The V2 API provides a clean, resource-based interface for all TofuPilot operations.
-
-### Configuration
-
-```csharp
-using Hylaean.TofuPilot;
-
-// Basic usage
-using var client = new TofuPilotClient(apiKey: "your-api-key");
-
-// With custom base URL
-using var client = new TofuPilotClient(
-    apiKey: "your-api-key",
-    baseUrl: "https://your-instance.tofupilot.com"
-);
-```
-
-### Creating a Run with Phases and Measurements
-
-```csharp
-var request = new CreateRunRequest
-{
-    ProcedureId = "proc-123",
-    Outcome = RunOutcome.PASS,
-    SerialNumber = "UNIT-001",
-    StartedAt = DateTimeOffset.UtcNow.AddMinutes(-10),
-    EndedAt = DateTimeOffset.UtcNow,
-    Phases = new List<CreateRunPhase>
-    {
-        new()
-        {
-            Name = "Voltage Test",
-            Outcome = PhaseOutcome.PASS,
-            StartTimeMillis = DateTimeOffset.UtcNow.AddMinutes(-10).ToUnixTimeMilliseconds(),
-            EndTimeMillis = DateTimeOffset.UtcNow.AddMinutes(-5).ToUnixTimeMilliseconds(),
-            Measurements = new List<CreateRunMeasurement>
-            {
-                new()
-                {
-                    Name = "Output Voltage",
-                    Outcome = MeasurementOutcome.PASS,
-                    MeasuredValue = 5.02,
-                    Units = "V",
-                    LowerLimit = 4.8,
-                    UpperLimit = 5.2
-                }
-            }
-        }
-    }
-};
-
-var run = await client.Runs.CreateAsync(request);
-```
-
-### Working with Units
-
-```csharp
-// List units
-var units = await client.Units.ListAsync(new ListUnitsRequest { Limit = 20 });
-
-// Create a unit
-var unit = await client.Units.CreateAsync(new CreateUnitRequest
-{
-    SerialNumber = "UNIT-001",
-    PartNumber = "PART-A"
-});
-
-// Add a child unit (for assemblies)
-await client.Units.AddChildAsync(parentUnitId, new AddChildRequest
-{
-    ChildId = childUnitId
-});
-```
-
-### Managing Procedures
-
-```csharp
-// List procedures
-var procedures = await client.Procedures.ListAsync(new ListProceduresRequest());
-
-// Create a procedure
-var procedure = await client.Procedures.CreateAsync(new CreateProcedureRequest
-{
-    Name = "Battery Test",
-    Description = "Full battery charge/discharge cycle test"
-});
-
-// Create a version
-var version = await client.Procedures.Versions.CreateAsync(
-    procedureId: procedure.Id,
-    new CreateVersionRequest { Name = "v1.0.0" }
-);
-```
-
-### Attachments
-
-```csharp
-// Upload a file in one line (initialize + S3 PUT + finalize)
-var attachmentId = await client.Attachments.UploadAsync("report.pdf");
-
-// Or upload from a stream
-using var stream = File.OpenRead("data.csv");
-var id = await client.Attachments.UploadAsync(stream, "data.csv");
-
-// Attach to a run
-await client.Runs.UpdateAsync(runId, new UpdateRunRequest
-{
-    Attachments = [attachmentId]
-});
-
-// Download from a signed URL
-await AttachmentsResource.DownloadAsync(downloadUrl, "local-report.pdf");
-```
-
 ## Dependency Injection
 
-The SDK supports ASP.NET Core dependency injection:
-
 ```csharp
-// In Program.cs or Startup.cs
 services.AddTofuPilot(options =>
 {
     options.ApiKey = configuration["TofuPilot:ApiKey"];
@@ -192,84 +55,29 @@ services.AddTofuPilot(options =>
     };
 });
 
-// In your service
-public class TestRunService
+// Inject TofuPilotClient anywhere
+public class TestRunService(TofuPilotClient client)
 {
-    private readonly TofuPilotClient _client;
-
-    public TestRunService(TofuPilotClient client)
-    {
-        _client = client;
-    }
-
-    public async Task<Run> CreateTestRunAsync(string serialNumber)
-    {
-        return await _client.Runs.CreateAsync(new CreateRunRequest
+    public Task<Run> CreateTestRunAsync(string serialNumber) =>
+        client.Runs.CreateAsync(new CreateRunRequest
         {
+            ProcedureId = "proc-123",
+            Outcome = RunOutcome.PASS,
             SerialNumber = serialNumber,
-            // ...
+            StartedAt = DateTimeOffset.UtcNow.AddMinutes(-5),
+            EndedAt = DateTimeOffset.UtcNow
         });
-    }
 }
 ```
 
-## Available Resources
+## Documentation
 
-| Resource | Methods |
-|----------|---------|
-| **Runs** | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| **Units** | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync, AddChildAsync, RemoveChildAsync |
-| **Procedures** | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| **Procedures.Versions** | ListAsync, CreateAsync, GetAsync, DeleteAsync |
-| **Parts** | ListAsync, CreateAsync, GetAsync, UpdateAsync |
-| **Parts.Revisions** | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| **Batches** | ListAsync, CreateAsync, GetAsync, UpdateAsync, DeleteAsync |
-| **Stations** | ListAsync, CreateAsync, GetAsync, UpdateAsync, RemoveAsync, LinkProcedureAsync, UnlinkProcedureAsync |
-| **Attachments** | InitializeAsync, DeleteAsync |
-
-## Error Handling
-
-The SDK throws specific exceptions for different error types:
-
-```csharp
-using TofuPilot.Abstractions.Exceptions;
-
-try
-{
-    var run = await client.Runs.GetAsync("invalid-id");
-}
-catch (NotFoundException ex)
-{
-    Console.WriteLine($"Run not found: {ex.Message}");
-}
-catch (UnauthorizedException ex)
-{
-    Console.WriteLine($"Invalid API key: {ex.Message}");
-}
-catch (BadRequestException ex)
-{
-    Console.WriteLine($"Invalid request: {ex.Message}");
-    Console.WriteLine($"Response body: {ex.ResponseBody}");
-}
-catch (TofuPilotException ex)
-{
-    Console.WriteLine($"API error ({ex.StatusCode}): {ex.Message}");
-}
-```
-
-### Exception Types
-
-| Exception | HTTP Status | Description |
-|-----------|-------------|-------------|
-| `BadRequestException` | 400 | Invalid request parameters |
-| `UnauthorizedException` | 401 | Invalid or missing API key |
-| `ForbiddenException` | 403 | Access denied |
-| `NotFoundException` | 404 | Resource not found |
-| `ConflictException` | 409 | Resource conflict |
-| `UnprocessableEntityException` | 422 | Validation error |
-| `RateLimitException` | 429 | Rate limit exceeded |
-| `InternalServerErrorException` | 500 | Server error |
-| `ServiceUnavailableException` | 503 | Service unavailable |
+| Topic | Description |
+|-------|-------------|
+| [Resources](docs/resources.md) | Full reference for all API resources (runs, units, procedures, parts, batches, stations, attachments, users) |
+| [Configuration](docs/configuration.md) | Direct instantiation, DI setup, environment variables, retry options |
+| [Error Handling](docs/error-handling.md) | Typed exceptions, status codes, base exception properties |
+| [API Coverage](API_COVERAGE.md) | Operation-by-operation mapping to the OpenAPI spec |
 
 ## Contributing
 
@@ -287,4 +95,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Official C# Client](https://github.com/tofupilot/csharp-client)
 - [Python SDK](https://github.com/tofupilot/tofupilot)
 - [Examples](https://github.com/tofupilot/examples)
-
