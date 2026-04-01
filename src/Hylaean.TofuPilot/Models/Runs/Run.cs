@@ -18,39 +18,14 @@ public record Run
     public RunOutcome Outcome { get; init; }
 
     /// <summary>
-    /// Gets the procedure ID.
+    /// Gets the procedure associated with this run (nested object from API).
     /// </summary>
-    public string? ProcedureId { get; init; }
+    public RunProcedure? Procedure { get; init; }
 
     /// <summary>
-    /// Gets the procedure name.
+    /// Gets the unit associated with this run (nested object from API).
     /// </summary>
-    public string? ProcedureName { get; init; }
-
-    /// <summary>
-    /// Gets the procedure version.
-    /// </summary>
-    public string? ProcedureVersion { get; init; }
-
-    /// <summary>
-    /// Gets the serial number of the unit under test.
-    /// </summary>
-    public string? SerialNumber { get; init; }
-
-    /// <summary>
-    /// Gets the part number.
-    /// </summary>
-    public string? PartNumber { get; init; }
-
-    /// <summary>
-    /// Gets the revision number.
-    /// </summary>
-    public string? RevisionNumber { get; init; }
-
-    /// <summary>
-    /// Gets the batch number.
-    /// </summary>
-    public string? BatchNumber { get; init; }
+    public RunUnit? Unit { get; init; }
 
     /// <summary>
     /// Gets when the run started.
@@ -71,11 +46,6 @@ public record Run
     /// Gets the duration of the run in ISO 8601 format.
     /// </summary>
     public string? Duration { get; init; }
-
-    /// <summary>
-    /// Gets the URL to view the run.
-    /// </summary>
-    public string? Url { get; init; }
 
     /// <summary>
     /// Gets the phases of the run.
@@ -276,4 +246,125 @@ public record RunAttachment
     /// Gets the content type.
     /// </summary>
     public string? ContentType { get; init; }
+}
+
+/// <summary>
+/// Represents the unit nested in a run response.
+/// </summary>
+public record RunUnit
+{
+    /// <summary>
+    /// Gets the unit ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the serial number.
+    /// </summary>
+    public string? SerialNumber { get; init; }
+
+    /// <summary>
+    /// Gets the part information.
+    /// </summary>
+    public RunUnitPart? Part { get; init; }
+
+    /// <summary>
+    /// Gets the batch information.
+    /// </summary>
+    public RunUnitBatch? Batch { get; init; }
+}
+
+/// <summary>
+/// Represents the part nested in a run unit response.
+/// </summary>
+public record RunUnitPart
+{
+    /// <summary>
+    /// Gets the part ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the part number.
+    /// </summary>
+    public string? Number { get; init; }
+
+    /// <summary>
+    /// Gets the part name.
+    /// </summary>
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets the revision information.
+    /// </summary>
+    public RunUnitPartRevision? Revision { get; init; }
+}
+
+/// <summary>
+/// Represents the revision nested in a run unit part response.
+/// </summary>
+public record RunUnitPartRevision
+{
+    /// <summary>
+    /// Gets the revision ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the revision number.
+    /// </summary>
+    public string? Number { get; init; }
+}
+
+/// <summary>
+/// Represents the batch nested in a run unit response.
+/// </summary>
+public record RunUnitBatch
+{
+    /// <summary>
+    /// Gets the batch ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the batch number.
+    /// </summary>
+    public string? Number { get; init; }
+}
+
+/// <summary>
+/// Represents the procedure nested in a run response.
+/// </summary>
+public record RunProcedure
+{
+    /// <summary>
+    /// Gets the procedure ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the procedure name.
+    /// </summary>
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets the procedure version.
+    /// </summary>
+    public RunProcedureVersion? Version { get; init; }
+}
+
+/// <summary>
+/// Represents the version nested in a run procedure response.
+/// </summary>
+public record RunProcedureVersion
+{
+    /// <summary>
+    /// Gets the version ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the version tag.
+    /// </summary>
+    public string? Tag { get; init; }
 }

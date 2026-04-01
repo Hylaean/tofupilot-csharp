@@ -42,8 +42,8 @@ foreach (var proc in tfcsProcedures)
 var runsFromSearch = await CollectAll(cursor =>
     client.Runs.ListAsync(new ListRunsRequest { SearchQuery = Prefix, Limit = 50, Cursor = cursor }));
 var extraRuns = runsFromSearch.Where(r =>
-    r.SerialNumber?.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase) == true ||
-    r.PartNumber?.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase) == true).ToList();
+    r.Unit?.SerialNumber?.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase) == true ||
+    r.Unit?.Part?.Number?.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase) == true).ToList();
 if (extraRuns.Count > 0)
 {
     await TryAsync(() => client.Runs.DeleteAsync(extraRuns.Select(r => r.Id)));

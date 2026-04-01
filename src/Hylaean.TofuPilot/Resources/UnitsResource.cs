@@ -41,16 +41,16 @@ public sealed class UnitsResource(ITofuPilotHttpClient httpClient) : ResourceBas
         HttpClient.PostAsync<CreateUnitRequest, Unit>(BasePath, request, cancellationToken);
 
     /// <summary>
-    /// Gets a unit by ID.
+    /// Gets a unit by serial number.
     /// </summary>
-    public Task<Unit> GetAsync(string id, CancellationToken cancellationToken = default) =>
-        HttpClient.GetAsync<Unit>($"{BasePath}/{id}", cancellationToken);
+    public Task<Unit> GetAsync(string serialNumber, CancellationToken cancellationToken = default) =>
+        HttpClient.GetAsync<Unit>($"{BasePath}/{serialNumber}", cancellationToken);
 
     /// <summary>
-    /// Updates a unit.
+    /// Updates a unit by serial number.
     /// </summary>
-    public Task<Unit> UpdateAsync(string id, UpdateUnitRequest request, CancellationToken cancellationToken = default) =>
-        HttpClient.PatchAsync<UpdateUnitRequest, Unit>($"{BasePath}/{id}", request, cancellationToken);
+    public Task<Unit> UpdateAsync(string serialNumber, UpdateUnitRequest request, CancellationToken cancellationToken = default) =>
+        HttpClient.PatchAsync<UpdateUnitRequest, Unit>($"{BasePath}/{serialNumber}", request, cancellationToken);
 
     /// <summary>
     /// Deletes units by serial numbers.

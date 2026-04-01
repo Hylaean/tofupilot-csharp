@@ -109,7 +109,8 @@ public class TofuPilotClientIntegrationTests : IDisposable
         // Assert - Get
         retrievedRun.Should().NotBeNull();
         retrievedRun.Id.Should().Be(createdRun.Id);
-        retrievedRun.SerialNumber.Should().Be(serialNumber);
+        retrievedRun.Unit.Should().NotBeNull();
+        retrievedRun.Unit!.SerialNumber.Should().Be(serialNumber);
 
         // Cleanup
         await _client.Runs.DeleteAsync(new[] { createdRun.Id });

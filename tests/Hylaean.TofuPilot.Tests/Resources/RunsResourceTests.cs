@@ -31,8 +31,7 @@ public class RunsResourceTests
                 new()
                 {
                     Id = "run-123",
-                    Outcome = RunOutcome.PASS,
-                    SerialNumber = "SN001"
+                    Outcome = RunOutcome.PASS
                 }
             },
             Meta = new PaginationMeta { HasMore = false }
@@ -69,8 +68,7 @@ public class RunsResourceTests
         var expectedRun = new Run
         {
             Id = "run-123",
-            Outcome = RunOutcome.PASS,
-            SerialNumber = "SN001"
+            Outcome = RunOutcome.PASS
         };
 
         _mockHttpClient
@@ -96,8 +94,7 @@ public class RunsResourceTests
         var expectedRun = new Run
         {
             Id = "run-123",
-            Outcome = RunOutcome.FAIL,
-            SerialNumber = "SN001"
+            Outcome = RunOutcome.FAIL
         };
 
         _mockHttpClient

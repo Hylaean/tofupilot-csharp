@@ -33,8 +33,7 @@ public class UnitsResourceTests
         var expectedUnit = new Unit
         {
             Id = "unit-123",
-            SerialNumber = "SN001",
-            PartNumber = "PN001"
+            SerialNumber = "SN001"
         };
 
         _mockHttpClient
