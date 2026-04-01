@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Hylaean.TofuPilot.Models.Common;
 
 namespace Hylaean.TofuPilot.Models.Parts;
 
@@ -24,19 +25,19 @@ public record Part
     public string? Name { get; init; }
 
     /// <summary>
-    /// Gets the part description.
-    /// </summary>
-    public string? Description { get; init; }
-
-    /// <summary>
     /// Gets when the part was created.
     /// </summary>
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
-    /// Gets the URL to view the part.
+    /// Gets the user who created this part.
     /// </summary>
-    public string? Url { get; init; }
+    public CreatedByUser? CreatedByUser { get; init; }
+
+    /// <summary>
+    /// Gets the station that created this part.
+    /// </summary>
+    public CreatedByStation? CreatedByStation { get; init; }
 
     /// <summary>
     /// Gets the revisions of this part.
@@ -61,14 +62,66 @@ public record PartRevision
     public string? RevisionNumber { get; init; }
 
     /// <summary>
-    /// Gets the part ID this revision belongs to.
-    /// </summary>
-    public string? PartId { get; init; }
-
-    /// <summary>
     /// Gets when the revision was created.
     /// </summary>
     public DateTimeOffset CreatedAt { get; init; }
+
+    /// <summary>
+    /// Gets the user who created this revision.
+    /// </summary>
+    public CreatedByUser? CreatedByUser { get; init; }
+
+    /// <summary>
+    /// Gets the station that created this revision.
+    /// </summary>
+    public CreatedByStation? CreatedByStation { get; init; }
+
+    /// <summary>
+    /// Gets the part this revision belongs to (GET only).
+    /// </summary>
+    public PartRevisionPart? Part { get; init; }
+
+    /// <summary>
+    /// Gets the units built with this revision (GET only).
+    /// </summary>
+    public IReadOnlyList<PartRevisionUnit>? Units { get; init; }
+}
+
+/// <summary>
+/// Represents the part nested in a revision GET response.
+/// </summary>
+public record PartRevisionPart
+{
+    /// <summary>
+    /// Gets the part ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the part number.
+    /// </summary>
+    public string? Number { get; init; }
+
+    /// <summary>
+    /// Gets the part name.
+    /// </summary>
+    public string? Name { get; init; }
+}
+
+/// <summary>
+/// Represents a unit nested in a revision GET response.
+/// </summary>
+public record PartRevisionUnit
+{
+    /// <summary>
+    /// Gets the unit ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the serial number.
+    /// </summary>
+    public string? SerialNumber { get; init; }
 }
 
 /// <summary>

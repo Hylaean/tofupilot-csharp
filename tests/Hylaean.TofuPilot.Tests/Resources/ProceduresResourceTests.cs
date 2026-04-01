@@ -210,7 +210,7 @@ public sealed class ProcedureVersionsResourceTests
     public async Task CreateAsync_SendsCorrectRequest()
     {
         // Arrange
-        var expected = new ProcedureVersion { Id = "ver-1", Tag = "v1.0", ProcedureId = "proc-123" };
+        var expected = new ProcedureVersion { Id = "ver-1", Tag = "v1.0" };
 
         _mockHttpClient
             .Setup(x => x.PostAsync<CreateProcedureVersionRequest, ProcedureVersion>(
@@ -229,14 +229,13 @@ public sealed class ProcedureVersionsResourceTests
         result.Should().NotBeNull();
         result.Id.Should().Be("ver-1");
         result.Tag.Should().Be("v1.0");
-        result.ProcedureId.Should().Be("proc-123");
     }
 
     [Fact]
     public async Task GetAsync_ReturnsProcedureVersion()
     {
         // Arrange
-        var expected = new ProcedureVersion { Id = "ver-1", Tag = "v1.0", ProcedureId = "proc-123" };
+        var expected = new ProcedureVersion { Id = "ver-1", Tag = "v1.0" };
 
         _mockHttpClient
             .Setup(x => x.GetAsync<ProcedureVersion>(

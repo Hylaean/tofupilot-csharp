@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Hylaean.TofuPilot.Models.Common;
 
 namespace Hylaean.TofuPilot.Models.Batches;
 
@@ -19,19 +20,97 @@ public record Batch
     public string? BatchNumber { get; init; }
 
     /// <summary>
-    /// Gets the part ID this batch is associated with.
-    /// </summary>
-    public string? PartId { get; init; }
-
-    /// <summary>
     /// Gets when the batch was created.
     /// </summary>
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
-    /// Gets the URL to view the batch.
+    /// Gets the user who created this batch.
     /// </summary>
-    public string? Url { get; init; }
+    public CreatedByUser? CreatedByUser { get; init; }
+
+    /// <summary>
+    /// Gets the station that created this batch.
+    /// </summary>
+    public CreatedByStation? CreatedByStation { get; init; }
+
+    /// <summary>
+    /// Gets the units in this batch (GET only).
+    /// </summary>
+    public IReadOnlyList<BatchUnit>? Units { get; init; }
+
+    /// <summary>
+    /// Gets the total number of units (LIST only).
+    /// </summary>
+    public int? UnitCount { get; init; }
+}
+
+/// <summary>
+/// Represents a unit nested in a batch GET response.
+/// </summary>
+public record BatchUnit
+{
+    /// <summary>
+    /// Gets the unit ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the serial number.
+    /// </summary>
+    public string? SerialNumber { get; init; }
+
+    /// <summary>
+    /// Gets when the unit was created.
+    /// </summary>
+    public DateTimeOffset CreatedAt { get; init; }
+
+    /// <summary>
+    /// Gets the part information.
+    /// </summary>
+    public BatchUnitPart? Part { get; init; }
+}
+
+/// <summary>
+/// Represents the part nested in a batch unit.
+/// </summary>
+public record BatchUnitPart
+{
+    /// <summary>
+    /// Gets the part ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the part number.
+    /// </summary>
+    public string? Number { get; init; }
+
+    /// <summary>
+    /// Gets the part name.
+    /// </summary>
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets the revision information.
+    /// </summary>
+    public BatchUnitPartRevision? Revision { get; init; }
+}
+
+/// <summary>
+/// Represents the revision nested in a batch unit part.
+/// </summary>
+public record BatchUnitPartRevision
+{
+    /// <summary>
+    /// Gets the revision ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the revision number.
+    /// </summary>
+    public string? Number { get; init; }
 }
 
 /// <summary>

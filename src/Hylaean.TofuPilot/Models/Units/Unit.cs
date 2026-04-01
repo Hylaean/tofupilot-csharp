@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Hylaean.TofuPilot.Models.Common;
 
 namespace Hylaean.TofuPilot.Models.Units;
 
@@ -23,12 +24,22 @@ public record Unit
     public DateTimeOffset CreatedAt { get; init; }
 
     /// <summary>
-    /// Gets the part information (nested object from API).
+    /// Gets the user who created this unit.
+    /// </summary>
+    public CreatedByUser? CreatedByUser { get; init; }
+
+    /// <summary>
+    /// Gets the station that created this unit.
+    /// </summary>
+    public CreatedByStation? CreatedByStation { get; init; }
+
+    /// <summary>
+    /// Gets the part information.
     /// </summary>
     public UnitPart? Part { get; init; }
 
     /// <summary>
-    /// Gets the batch information (nested object from API).
+    /// Gets the batch information.
     /// </summary>
     public UnitBatch? Batch { get; init; }
 
@@ -41,6 +52,21 @@ public record Unit
     /// Gets the child units.
     /// </summary>
     public IReadOnlyList<Unit>? Children { get; init; }
+
+    /// <summary>
+    /// Gets the run that created this unit.
+    /// </summary>
+    public UnitCreatedDuring? CreatedDuring { get; init; }
+
+    /// <summary>
+    /// Gets the attachments for this unit.
+    /// </summary>
+    public IReadOnlyList<UnitAttachment>? Attachments { get; init; }
+
+    /// <summary>
+    /// Gets the most recent test run (LIST only).
+    /// </summary>
+    public UnitLastRun? LastRun { get; init; }
 }
 
 /// <summary>
@@ -99,6 +125,141 @@ public record UnitBatch
     /// Gets the batch number.
     /// </summary>
     public string? Number { get; init; }
+}
+
+/// <summary>
+/// Represents the run that created a unit.
+/// </summary>
+public record UnitCreatedDuring
+{
+    /// <summary>
+    /// Gets the run ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets when the run was created.
+    /// </summary>
+    public DateTimeOffset CreatedAt { get; init; }
+
+    /// <summary>
+    /// Gets when the run started.
+    /// </summary>
+    public DateTimeOffset StartedAt { get; init; }
+
+    /// <summary>
+    /// Gets when the run ended.
+    /// </summary>
+    public DateTimeOffset EndedAt { get; init; }
+
+    /// <summary>
+    /// Gets the duration in ISO 8601 format.
+    /// </summary>
+    public string? Duration { get; init; }
+
+    /// <summary>
+    /// Gets the run outcome.
+    /// </summary>
+    public string? Outcome { get; init; }
+
+    /// <summary>
+    /// Gets the procedure information.
+    /// </summary>
+    public UnitCreatedDuringProcedure? Procedure { get; init; }
+}
+
+/// <summary>
+/// Represents the procedure nested in a created_during run.
+/// </summary>
+public record UnitCreatedDuringProcedure
+{
+    /// <summary>
+    /// Gets the procedure ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the procedure name.
+    /// </summary>
+    public string? Name { get; init; }
+}
+
+/// <summary>
+/// Represents an attachment on a unit.
+/// </summary>
+public record UnitAttachment
+{
+    /// <summary>
+    /// Gets the attachment ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the file name.
+    /// </summary>
+    public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets the file size in bytes.
+    /// </summary>
+    public long? Size { get; init; }
+
+    /// <summary>
+    /// Gets the content type.
+    /// </summary>
+    public string? ContentType { get; init; }
+
+    /// <summary>
+    /// Gets the presigned download URL.
+    /// </summary>
+    public string? DownloadUrl { get; init; }
+}
+
+/// <summary>
+/// Represents the most recent run on a unit (LIST response).
+/// </summary>
+public record UnitLastRun
+{
+    /// <summary>
+    /// Gets the run ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the run outcome.
+    /// </summary>
+    public string? Outcome { get; init; }
+
+    /// <summary>
+    /// Gets when the run started.
+    /// </summary>
+    public DateTimeOffset? StartedAt { get; init; }
+
+    /// <summary>
+    /// Gets when the run ended.
+    /// </summary>
+    public DateTimeOffset? EndedAt { get; init; }
+
+    /// <summary>
+    /// Gets the procedure information.
+    /// </summary>
+    public UnitLastRunProcedure? Procedure { get; init; }
+}
+
+/// <summary>
+/// Represents the procedure in a unit's last run.
+/// </summary>
+public record UnitLastRunProcedure
+{
+    /// <summary>
+    /// Gets the procedure ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the procedure name.
+    /// </summary>
+    public string? Name { get; init; }
 }
 
 /// <summary>

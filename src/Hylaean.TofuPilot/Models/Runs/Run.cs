@@ -1,4 +1,5 @@
 using Hylaean.TofuPilot.Abstractions.Models;
+using Hylaean.TofuPilot.Models.Common;
 
 namespace Hylaean.TofuPilot.Models.Runs;
 
@@ -18,12 +19,12 @@ public record Run
     public RunOutcome Outcome { get; init; }
 
     /// <summary>
-    /// Gets the procedure associated with this run (nested object from API).
+    /// Gets the procedure associated with this run.
     /// </summary>
     public RunProcedure? Procedure { get; init; }
 
     /// <summary>
-    /// Gets the unit associated with this run (nested object from API).
+    /// Gets the unit associated with this run.
     /// </summary>
     public RunUnit? Unit { get; init; }
 
@@ -48,6 +49,26 @@ public record Run
     public string? Duration { get; init; }
 
     /// <summary>
+    /// Gets the docstring/notes for the run.
+    /// </summary>
+    public string? Docstring { get; init; }
+
+    /// <summary>
+    /// Gets the user who created this run.
+    /// </summary>
+    public CreatedByUser? CreatedByUser { get; init; }
+
+    /// <summary>
+    /// Gets the station that created this run.
+    /// </summary>
+    public CreatedByStation? CreatedByStation { get; init; }
+
+    /// <summary>
+    /// Gets the operator of this run.
+    /// </summary>
+    public CreatedByUser? OperatedBy { get; init; }
+
+    /// <summary>
     /// Gets the phases of the run.
     /// </summary>
     public IReadOnlyList<RunPhase>? Phases { get; init; }
@@ -63,14 +84,9 @@ public record Run
     public IReadOnlyList<RunAttachment>? Attachments { get; init; }
 
     /// <summary>
-    /// Gets the docstring/notes for the run.
+    /// Gets the sub-units that had parent changes during this run.
     /// </summary>
-    public string? Docstring { get; init; }
-
-    /// <summary>
-    /// Gets the operator email.
-    /// </summary>
-    public string? OperatedBy { get; init; }
+    public IReadOnlyList<RunSubUnit>? SubUnits { get; init; }
 }
 
 /// <summary>
@@ -78,6 +94,11 @@ public record Run
 /// </summary>
 public record RunPhase
 {
+    /// <summary>
+    /// Gets the phase ID.
+    /// </summary>
+    public string? Id { get; init; }
+
     /// <summary>
     /// Gets the phase name.
     /// </summary>
@@ -99,6 +120,16 @@ public record RunPhase
     public DateTimeOffset EndedAt { get; init; }
 
     /// <summary>
+    /// Gets the duration in ISO 8601 format.
+    /// </summary>
+    public string? Duration { get; init; }
+
+    /// <summary>
+    /// Gets the retry count (0 = first attempt).
+    /// </summary>
+    public int RetryCount { get; init; }
+
+    /// <summary>
     /// Gets the measurements in this phase.
     /// </summary>
     public IReadOnlyList<RunMeasurement>? Measurements { get; init; }
@@ -114,6 +145,11 @@ public record RunPhase
 /// </summary>
 public record RunMeasurement
 {
+    /// <summary>
+    /// Gets the measurement ID.
+    /// </summary>
+    public string? Id { get; init; }
+
     /// <summary>
     /// Gets the measurement name.
     /// </summary>
@@ -135,24 +171,45 @@ public record RunMeasurement
     public string? Units { get; init; }
 
     /// <summary>
-    /// Gets the lower limit.
-    /// </summary>
-    public double? LowerLimit { get; init; }
-
-    /// <summary>
-    /// Gets the upper limit.
-    /// </summary>
-    public double? UpperLimit { get; init; }
-
-    /// <summary>
     /// Gets the validators.
     /// </summary>
     public IReadOnlyList<MeasurementValidator>? Validators { get; init; }
 
     /// <summary>
-    /// Gets the docstring for this measurement.
+    /// Gets the aggregations computed over this measurement.
     /// </summary>
-    public string? Docstring { get; init; }
+    public IReadOnlyList<object>? Aggregations { get; init; }
+
+    /// <summary>
+    /// Gets the multi-dimensional measurement data series.
+    /// </summary>
+    public IReadOnlyList<MeasurementDataSeries>? DataSeries { get; init; }
+}
+
+/// <summary>
+/// Represents a data series entry for a measurement.
+/// </summary>
+public record MeasurementDataSeries
+{
+    /// <summary>
+    /// Gets the data values.
+    /// </summary>
+    public IReadOnlyList<double>? Data { get; init; }
+
+    /// <summary>
+    /// Gets the units.
+    /// </summary>
+    public string? Units { get; init; }
+
+    /// <summary>
+    /// Gets the validators.
+    /// </summary>
+    public IReadOnlyList<object>? Validators { get; init; }
+
+    /// <summary>
+    /// Gets the aggregations.
+    /// </summary>
+    public IReadOnlyList<object>? Aggregations { get; init; }
 }
 
 /// <summary>
@@ -197,6 +254,11 @@ public record MeasurementValidator
 public record RunLog
 {
     /// <summary>
+    /// Gets the log ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
     /// Gets the log level.
     /// </summary>
     public Abstractions.Models.LogLevel Level { get; init; }
@@ -235,17 +297,53 @@ public record RunAttachment
     /// <summary>
     /// Gets the file name.
     /// </summary>
-    public string? FileName { get; init; }
+    public string? Name { get; init; }
 
     /// <summary>
-    /// Gets the URL to download the attachment.
+    /// Gets the file size in bytes.
     /// </summary>
-    public string? Url { get; init; }
+    public long? Size { get; init; }
 
     /// <summary>
     /// Gets the content type.
     /// </summary>
     public string? ContentType { get; init; }
+
+    /// <summary>
+    /// Gets whether this attachment is a test report.
+    /// </summary>
+    public bool IsReport { get; init; }
+
+    /// <summary>
+    /// Gets the presigned download URL.
+    /// </summary>
+    public string? DownloadUrl { get; init; }
+}
+
+/// <summary>
+/// Represents a sub-unit in a run response.
+/// </summary>
+public record RunSubUnit
+{
+    /// <summary>
+    /// Gets the unit ID.
+    /// </summary>
+    public string? Id { get; init; }
+
+    /// <summary>
+    /// Gets the serial number.
+    /// </summary>
+    public string? SerialNumber { get; init; }
+
+    /// <summary>
+    /// Gets the part number.
+    /// </summary>
+    public string? PartNumber { get; init; }
+
+    /// <summary>
+    /// Gets the part name.
+    /// </summary>
+    public string? PartName { get; init; }
 }
 
 /// <summary>
