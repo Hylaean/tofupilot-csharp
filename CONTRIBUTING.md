@@ -116,7 +116,7 @@ docs: update README with new examples
 Integration tests require environment variables:
 
 ```bash
-export TOFUPILOT_URL="https://www.tofupilot.com"
+export TOFUPILOT_URL="https://www.tofupilot.app/api/"
 export TOFUPILOT_API_KEY="your-api-key"
 export TOFUPILOT_PROCEDURE_ID="your-procedure-id"
 

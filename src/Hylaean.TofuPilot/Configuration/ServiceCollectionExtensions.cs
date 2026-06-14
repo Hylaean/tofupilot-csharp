@@ -40,7 +40,7 @@ public static class ServiceCollectionExtensions
             var options = sp.GetRequiredService<IOptions<TofuPilotOptions>>().Value;
             var baseUrl = !string.IsNullOrEmpty(options.BaseUrl)
                 ? options.BaseUrl
-                : Environment.GetEnvironmentVariable("TOFUPILOT_URL") ?? "https://www.tofupilot.com";
+                : Environment.GetEnvironmentVariable("TOFUPILOT_URL") ?? "https://www.tofupilot.app/api/";
 
             client.BaseAddress = new Uri(baseUrl);
             client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);

@@ -38,7 +38,7 @@ dotnet pack -c Release
 
 Tests require these environment variables for integration tests:
 
-- `TOFUPILOT_URL` - Server URL (defaults to https://www.tofupilot.com)
+- `TOFUPILOT_URL` - Server URL (defaults to https://www.tofupilot.app/api/)
 - `TOFUPILOT_API_KEY` - API key for authentication
 - `TOFUPILOT_PROCEDURE_ID` - A valid procedure ID for creating test runs
 
@@ -81,7 +81,7 @@ var runs = await client.Runs.ListAsync();
 // Or with DI
 services.AddTofuPilot(options => {
     options.ApiKey = "your-key";
-    options.BaseUrl = "https://www.tofupilot.com";
+    options.BaseUrl = "https://www.tofupilot.app/api/";
 });
 ```
 

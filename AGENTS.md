@@ -30,7 +30,7 @@ dotnet pack -c Release
 ```
 
 **Integration test env vars:**
-- `TOFUPILOT_URL` — server URL (default: https://www.tofupilot.com)
+- `TOFUPILOT_URL` — server URL (default: https://www.tofupilot.app/api/)
 - `TOFUPILOT_API_KEY` — API key
 - `TOFUPILOT_PROCEDURE_ID` — a valid procedure ID
 

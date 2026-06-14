@@ -18,10 +18,10 @@ public class TofuPilotOptions
 
     /// <summary>
     /// Gets or sets the base URL for the TofuPilot API.
-    /// Defaults to https://www.tofupilot.com.
+    /// Defaults to https://www.tofupilot.app/api/.
     /// Can also be set via TOFUPILOT_URL environment variable.
     /// </summary>
-    public string BaseUrl { get; set; } = "https://www.tofupilot.com";
+    public string BaseUrl { get; set; } = "https://www.tofupilot.app/api/";
 
     /// <summary>
     /// Gets or sets the timeout for HTTP requests in seconds.

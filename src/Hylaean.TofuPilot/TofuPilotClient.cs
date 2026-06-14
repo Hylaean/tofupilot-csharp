@@ -54,7 +54,7 @@ public sealed class TofuPilotClient : IDisposable
     /// Initializes a new instance of the <see cref="TofuPilotClient"/> class with an API key.
     /// </summary>
     /// <param name="apiKey">The API key for authentication.</param>
-    /// <param name="baseUrl">The base URL for the API. Defaults to https://www.tofupilot.com.</param>
+    /// <param name="baseUrl">The base URL for the API. Defaults to https://www.tofupilot.app/api/.</param>
     public TofuPilotClient(string? apiKey = null, string? baseUrl = null)
         : this(CreateHttpClient(apiKey, baseUrl, out var ownedClient))
     {

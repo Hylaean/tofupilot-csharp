@@ -72,7 +72,7 @@ using Hylaean.TofuPilot.Configuration;
 services.AddTofuPilot(options =>
 {
     options.ApiKey = "tp_...";
-    options.BaseUrl = "https://www.tofupilot.com";
+    options.BaseUrl = "https://www.tofupilot.app/api/";
     options.TimeoutSeconds = 30;
     options.Retry = new RetryOptions
     {
@@ -761,7 +761,7 @@ All exceptions expose: `StatusCode`, `ErrorCode`, `ResponseBody`.
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `ApiKey` | `string?` | env `TOFUPILOT_API_KEY` | API key |
-| `BaseUrl` | `string?` | `"https://www.tofupilot.com"` | API base URL (env `TOFUPILOT_URL`) |
+| `BaseUrl` | `string?` | `"https://www.tofupilot.app/api/"` | API base URL (env `TOFUPILOT_URL`) |
 | `TimeoutSeconds` | `int` | `30` | HTTP timeout |
 | `Retry` | `RetryOptions` | see below | Retry configuration |
 

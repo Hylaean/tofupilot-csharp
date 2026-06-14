@@ -22,7 +22,7 @@ using var client = new TofuPilotClient(
 services.AddTofuPilot(options =>
 {
     options.ApiKey = configuration["TofuPilot:ApiKey"];
-    options.BaseUrl = "https://www.tofupilot.com";
+    options.BaseUrl = "https://www.tofupilot.app/api/";
     options.TimeoutSeconds = 30;
     options.Retry = new RetryOptions
     {
@@ -59,7 +59,7 @@ This reads from the `"TofuPilot"` section in `appsettings.json`:
 {
   "TofuPilot": {
     "ApiKey": "your-api-key",
-    "BaseUrl": "https://www.tofupilot.com",
+    "BaseUrl": "https://www.tofupilot.app/api/",
     "TimeoutSeconds": 30,
     "Retry": {
       "MaxRetries": 3,
@@ -75,7 +75,7 @@ This reads from the `"TofuPilot"` section in `appsettings.json`:
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `TOFUPILOT_API_KEY` | API key (used when none is passed explicitly) | — |
-| `TOFUPILOT_URL` | Base URL | `https://www.tofupilot.app/api/` (direct) / `https://www.tofupilot.com` (DI) |
+| `TOFUPILOT_URL` | Base URL | `https://www.tofupilot.app/api/` |
 
 ## Retry Options
 

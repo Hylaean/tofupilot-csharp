@@ -46,7 +46,7 @@ Console.WriteLine($"Created run: {run.Id}");
 services.AddTofuPilot(options =>
 {
     options.ApiKey = configuration["TofuPilot:ApiKey"];
-    options.BaseUrl = "https://www.tofupilot.com";
+    options.BaseUrl = "https://www.tofupilot.app/api/";
     options.Retry = new RetryOptions
     {
         MaxRetries = 3,
